@@ -1,0 +1,18 @@
+version: '3'
+
+networks: 
+  iot:
+    driver: bridge
+
+services: 
+  modbus-server:
+    image: oitc/modbus-server
+    container_name: modbus-server
+    hostname: modbus-server
+    restart: always
+    ports:
+        - '5020:5020'
+    expose: 
+        - '5020'
+    networks: 
+      - iot

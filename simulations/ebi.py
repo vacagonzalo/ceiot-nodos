@@ -6,7 +6,7 @@ def r():
     return random.randint(0, 65535)
 
 
-client = ModbusClient(host='0.0.0.0', port=10502,
+client = ModbusClient(host='0.0.0.0', port=5020,
                       auto_open=True, auto_close=True)
 
 regs = client.read_holding_registers(0, 10)
