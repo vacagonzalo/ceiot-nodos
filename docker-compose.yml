@@ -1,31 +1,44 @@
 version: '3'
 
 networks: 
-  iot:
-    driver: bridge
+    iot:
+        driver: bridge
 
 services: 
-  modbus-server:
-    image: oitc/modbus-server
-    container_name: modbus-server
-    hostname: modbus-server
-    restart: always
-    ports:
-        - '5020:5020'
-    expose: 
-        - '5020'
-    networks: 
-      - iot
-  mosquitto:
-    image: eclipse-mosquitto
-    container_name: mosquitto
-    hostname: mosquitto
-    restart: always
-    volumes: 
-        - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-    expose: 
-        - '1883'
-    ports: 
-        - '1883:1883'
-    networks: 
-        - iot
+    modbus-server:
+        image: oitc/modbus-server
+        container_name: modbus-server
+        hostname: modbus-server
+        restart: always
+        ports:
+            - '5020:5020'
+        expose: 
+            - '5020'
+        networks: 
+            - iot
+    mosquitto:
+        image: eclipse-mosquitto
+        container_name: mosquitto
+        hostname: mosquitto
+        restart: always
+        volumes: 
+            - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+        expose: 
+            - '1883'
+        ports: 
+            - '1883:1883'
+        networks: 
+            - iot
+    hrv:
+        build: ./holdingRegistersValidator/
+        image: vaca/hrv
+        container_name: hrv
+        hostname: hrv
+        restart: always
+        expose: 
+            - '1883'
+            - '5020'
+        depends_on: 
+            - 'mosquitto'
+        networks: 
+            - iot

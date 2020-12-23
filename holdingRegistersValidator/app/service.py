@@ -14,7 +14,7 @@ def getAddr(id):
 ################################################################################
 # MODBUS
 ################################################################################
-slave = '0.0.0.0'
+slave = 'modbus-server'
 port = 5020
 master = pyModbus(host=slave, port=port,
                   auto_open=True, auto_close=True)
@@ -44,7 +44,7 @@ def onMessage(client, userdata, msg):
 client = paho.Client()
 client.on_message = onMessage
 
-if client.connect("0.0.0.0", 1883, 60) != 0:
+if client.connect("mosquitto", 1883, 60) != 0:
     print("Could not connect to MQTT Broker")
     sys.exit(-1)
 
