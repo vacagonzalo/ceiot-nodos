@@ -3,6 +3,7 @@ url = '0.0.0.0'
 client = MongoClient(url)
 db = client['gador']
 devices = db['devices']
+measurements = db['measurements']
 
 print("test1")
 results = devices.find()
@@ -33,3 +34,8 @@ if 'key' in result:
     print("falso positivo")
 else:
     print("key no existe")
+
+print("test7")
+m = measurements.find()
+for x in m:
+    print(x)
