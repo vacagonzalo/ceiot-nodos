@@ -42,3 +42,14 @@ services:
             - 'mosquitto'
         networks: 
             - iot
+    mongo:
+        image: mongo
+        container_name: mongo
+        hostname: mongo
+        command: mongod --bind_ip_all --port 27017
+        expose: 
+            - '27017'
+        volumes: 
+            - ./mongodb/scripts:/scripts
+        networks:
+            - iot
