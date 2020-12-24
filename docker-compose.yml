@@ -40,6 +40,8 @@ services:
             - '5020'
         depends_on: 
             - 'mosquitto'
+            - 'mongo'
+            - 'modbus-server'
         networks: 
             - iot
     mongo:
@@ -54,4 +56,18 @@ services:
         volumes: 
             - ./mongodb/scripts:/scripts
         networks:
+            - iot
+    pv:
+        build: ./persistenceValidator
+        image: vaca/pv
+        container_name: pv
+        hostname: pv
+        restart: always
+        expose: 
+            - '1883'
+            - '27017'
+        depends_on: 
+            - 'mosquitto'
+            - 'mongo'
+        networks: 
             - iot
