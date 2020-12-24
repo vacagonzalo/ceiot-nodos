@@ -49,6 +49,8 @@ services:
         command: mongod --bind_ip_all --port 27017
         expose: 
             - '27017'
+        ports: # added to test pymongo
+            - '27017:27017'
         volumes: 
             - ./mongodb/scripts:/scripts
         networks:
