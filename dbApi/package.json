@@ -1,0 +1,34 @@
+{
+  "name": "dbapi",
+  "version": "1.0.0",
+  "description": "api for users",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install",
+    "dev": "./mockDB/mongo.sh && eval $(cat ./enviroment/dev.env) nodemon index.js",
+    "production": "eval $(cat ./enviroment/.env) node index.js",
+    "test": "./mockDB/mongo.sh && eval $(cat ./enviroment/test.env) cucumber-js --publish-quiet"
+  },
+  "keywords": [
+    "iot",
+    "uba",
+    "mongodb",
+    "mqtt",
+    "modbus",
+    "jwt"
+  ],
+  "author": "Gonzalo Nahuel Vaca <vacagonzalo@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.8"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^7.0.0",
+    "chai": "^4.2.0",
+    "nodemon": "^2.0.6",
+    "nyc": "^15.1.0"
+  }
+}
