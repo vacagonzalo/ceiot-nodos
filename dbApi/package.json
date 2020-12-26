@@ -7,7 +7,7 @@
     "build": "npm install",
     "dev": "./mockDB/mongo.sh && eval $(cat ./enviroment/dev.env) nodemon index.js",
     "production": "eval $(cat ./enviroment/.env) node index.js",
-    "test": "./mockDB/mongo.sh && eval $(cat ./enviroment/test.env) cucumber-js --publish-quiet"
+    "test": "./mockDB/mongo.sh && eval $(cat ./enviroment/test.env) cucumber-js --publish-quiet && docker stop mongodb"
   },
   "keywords": [
     "iot",
