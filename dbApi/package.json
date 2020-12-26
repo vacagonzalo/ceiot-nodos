@@ -7,7 +7,8 @@
     "build": "npm install",
     "dev": "./mockDB/mongo.sh && eval $(cat ./enviroment/dev.env) nodemon index.js",
     "production": "eval $(cat ./enviroment/.env) node index.js",
-    "test": "./mockDB/mongo.sh && eval $(cat ./enviroment/test.env) cucumber-js --publish-quiet && docker stop mongodb"
+    "test": "eval $(cat ./enviroment/dev.env) mocha --reporter spec --timeout 1000",
+    "clean": "docker stop mongodb"
   },
   "keywords": [
     "iot",
@@ -26,8 +27,9 @@
     "mongoose": "^5.11.8"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "^7.0.0",
     "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
     "nyc": "^15.1.0"
   }

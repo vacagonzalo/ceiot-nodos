@@ -1,29 +1,28 @@
-use gador;
-db = db.getSisterDB("gador");
-db.devices.insert(
-    [
-        {
-            "serial" : 123,
-            "tag" : "esp32",
-            "modbus" : 0,
-            "frec" : 60
-        },
-        {
-            "serial" : 124,
-            "tag" : "raspberry",
-            "modbus" : 1,
-            "frec" : 60
-        },
-        {
-            "serial" : 125,
-            "tag" : "edu-ciaa",
-            "modbus" : 2,
-            "frec" : 60
-        }
-    ]
-);
-db.measurements.insert(
-    [
+// run 'npm run dev' before testing!
+const PORT = process.env.PORT;
+const url = `localhost:${PORT}`;
+
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+
+const assert = chai.assert;
+
+chai.use(chaiHttp);
+
+describe('Checking the testing tools', () => {
+    it('should work', () => {
+        chai.request(url)
+            .get('/')
+            .end((err, res) => {
+                assert.equal(res.status, 200);
+                assert.equal(res.text,'working');
+                return;
+            });
+    });
+});
+
+describe('On endpoint "/readings"', () => {
+    let data = [
         {
             date: "2020-12-01",
             tag: "esp32",
@@ -85,4 +84,13 @@ db.measurements.insert(
             val: 13
         }
     ]
-);
+    it('should give all the measurements of all devices', () => {
+        chai.request(url)
+            .get('/readings')
+            .end((err, res) => {
+                assert.equal(res.status, 200);
+                assert.equal(res.text, data);
+                return;
+            });      
+    });
+})
