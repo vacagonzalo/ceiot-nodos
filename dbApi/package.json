@@ -6,8 +6,8 @@
   "scripts": {
     "build": "npm install",
     "dev": "./mockDB/mongo.sh && eval $(cat ./enviroment/dev.env) nodemon index.js",
-    "production": "eval $(cat ./enviroment/.env) node index.js",
-    "test": "eval $(cat ./enviroment/dev.env) mocha --reporter spec --timeout 1000",
+    "production": "./mockDB/resetDB.sh && eval $(cat ./enviroment/.env) node index.js",
+    "test": "eval $(cat ./enviroment/dev.env) mocha",
     "clean": "docker stop mongodb"
   },
   "keywords": [
@@ -30,6 +30,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^8.2.1",
+    "node-fetch": "^2.6.1",
     "nodemon": "^2.0.6",
     "nyc": "^15.1.0"
   }
