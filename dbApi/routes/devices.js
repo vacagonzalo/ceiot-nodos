@@ -24,7 +24,11 @@ router.post('', async (req, res) => {
         await device.save();
         res.sendStatus(201);
     } catch (err) {
-        res.sendStatus(500);
+        if(err.code == 11000) {
+            res.sendStatus(403);
+        } else {
+            res.sendStatus(500);
+        }
     }
 });
 
