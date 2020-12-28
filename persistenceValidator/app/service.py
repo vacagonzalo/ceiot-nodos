@@ -17,7 +17,8 @@ def insertReading(id, value, unit):
     post = {
         "date": datetime.datetime.utcnow(),
         "tag": id,
-        "val": [value, unit]
+        "val": value,
+        "unit": unit
     }
     global measurements
     measurements.insert_one(post)
