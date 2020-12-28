@@ -34,6 +34,43 @@ router.post('/', async (req, res) => {
         console.log(err);
         res.sendStatus(500);
     }
+});
+
+router.put('/', async (req, res) => {
+    try {
+        const body = req.body;
+        let updated = await User.findOneAndUpdate(
+            { name: body.name },
+            {
+                email: body.email,
+                password: body.password,
+                rank: body.rank
+            }
+        );
+        if (updated) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(403);
+        }
+    } catch (error) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+router.delete('/', async (req, res) => {
+    try {
+        const body = req.body;
+        let deleted = await User.findOneAndDelete({ name: body.name });
+        if (deleted) {
+            res.sendStatus(202);
+        } else {
+            res.sendStatus(403);
+        }
+    } catch (error) {
+        console.log(err);
+        res.sendStatus(500);
+    }
 })
 
 module.exports = router;
