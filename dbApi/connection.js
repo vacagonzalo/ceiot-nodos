@@ -1,6 +1,5 @@
-const DB_URL = process.env.DB_URL;
+const DB_URL = 'mongodb://mongo:27017/gador'//process.env.DB_URL;
 const mongoose = require('mongoose');
-const { createIndexes } = require('./models/Device');
 const db = mongoose.connection;
 mongoose.connect(DB_URL, {
     useNewUrlParser: true,

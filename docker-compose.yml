@@ -71,3 +71,16 @@ services:
             - 'mongo'
         networks: 
             - iot
+    db-api:
+        build: ./dbApi
+        image: vaca/db-api
+        container_name: db-api
+        hostname: db-api
+        expose: 
+            - '27017'
+        ports: 
+            - '8080:8080'
+        depends_on: 
+            - 'mongo'
+        networks: 
+            -   iot
