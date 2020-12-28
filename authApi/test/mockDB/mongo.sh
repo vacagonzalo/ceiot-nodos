@@ -7,7 +7,7 @@ CONTAINER_PORT=27017
 CONTAINER_DIRECTORY=/scripts
 
 MACHINE_PORT=27017
-MACHINE_DIRECTORY=$PWD/mockDB
+MACHINE_DIRECTORY=$PWD/test/mockDB
 
 printf "=====================================================================\n"
 printf "imagen: $IMAGE_NAME\n"

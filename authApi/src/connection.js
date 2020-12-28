@@ -1,4 +1,4 @@
-const DB_URL = 'mongodb://mongo:27017/gador';
+const DB_URL = process.env.DB_URL || 'mongodb://mongo:27017/gador';
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 mongoose.connect(DB_URL, {
