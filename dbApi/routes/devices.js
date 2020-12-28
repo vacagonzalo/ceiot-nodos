@@ -11,24 +11,81 @@ router.get('', async (req, res) => {
     }
 });
 
+router.get('/:tag', async (req, res) => {
+    try {
+        let device = await Device.findOne(
+            { tag: req.params.tag },
+            { _id: 0, __v: 0 }
+        );
+        if (device) {
+            res.status(200).send(device);
+        } else {
+            res.sendStatus(204);
+        }
+    } catch (err) {
+
+    }
+});
+
 router.post('', async (req, res) => {
     try {
+        let body = req.body;
+        let dupplicated = await Device.findOne(
+            { $or: [{ serial: body.serial }, { tag: body.tag }] },
+            {}
+        );
+        if (dupplicated) {
+            res.sendStatus(403);
+        } else {
+            let device = new Device({
+                serial: body.serial,
+                tag: body.tag,
+                modbus: body.modbus,
+                frec: body.frec,
+                unit: body.unit
+            });
+            await device.save();
+            res.sendStatus(201);
+        }
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+router.put('/', async (req, res) => {
+    try {
         const body = req.body;
-        let device = new Device({
-            serial: body.serial,
+        const filter = { serial: body.serial };
+        const update = {
             tag: body.tag,
             modbus: body.modbus,
             frec: body.frec,
             unit: body.unit
-        });
-        await device.save();
-        res.sendStatus(201);
-    } catch (err) {
-        if(err.code == 11000) {
-            res.sendStatus(403);
-        } else {
-            res.sendStatus(500);
         }
+        await Device.findOneAndUpdate(filter, update);
+        let device = await Device.findOne(filter, { _id: 0, __v: 0 });
+        if (device) {
+            res.status(200).send(device);
+        } else {
+            res.sendStatus(403);
+        }
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+router.delete('/', async (req, res) => {
+    try {
+        let deleted = await Device.findOneAndDelete({tag: req.body.tag},{});
+        if(deleted){
+            res.sendStatus(202)
+        }else {
+            res.sendStatus(403);
+        }
+    } catch (error) {
+        
     }
 });
 

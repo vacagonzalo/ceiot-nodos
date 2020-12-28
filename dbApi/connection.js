@@ -1,9 +1,11 @@
 const DB_URL = process.env.DB_URL;
 const mongoose = require('mongoose');
+const { createIndexes } = require('./models/Device');
 const db = mongoose.connection;
 mongoose.connect(DB_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 }).catch(err => console.log(err));
 
 db.once('open', _ => {
