@@ -23,3 +23,10 @@ db.measurements.insert(
         { date: new Date("2018-12-01"), tag: "edu-ciaa", val: 13, unit: "t" }
     ]
 );
+db.users.insert(
+    [
+        { name: "Bob", email: "bob@gador.com", password: "1234", rank: 3},
+        { name: "Margaret", email: "margaret@gador.com", password: "password", rank: 2},
+        { name: "John", email: "john@gador.com", password: "superSecret", rank: 1},
+    ]
+);

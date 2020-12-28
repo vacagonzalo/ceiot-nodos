@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 
 app.use('/readings', require('./routes/readings'));
 app.use('/devices', require('./routes/devices'));
+app.use('/users', require('./routes/users'));
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

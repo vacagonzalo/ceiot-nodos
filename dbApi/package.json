@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm install",
     "dev": "./mockDB/mongo.sh && eval $(cat ./enviroment/dev.env) nodemon index.js",
-    "production": "./mockDB/resetDB.sh && eval $(cat ./enviroment/.env) node index.js",
+    "production": "eval $(cat ./enviroment/.env) node index.js",
     "test": "clear && ./mockDB/restart.sh && eval $(cat ./enviroment/dev.env) mocha",
     "clean": "docker stop mongodb"
   },
