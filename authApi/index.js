@@ -1,4 +1,5 @@
 require('./src/connection');
+require('./src/cache');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
