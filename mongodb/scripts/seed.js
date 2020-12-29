@@ -1,3 +1,3 @@
 use gador;
 load("scripts/devices.js")
-db.devices.find().count()
+load("scripts/users.js")
