@@ -18,3 +18,27 @@ describe('Sending a valid POST', () => {
         expect(text).to.match(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/);
     });
 });
+
+describe('Sending an invalid POST (wrong password)', () => {
+    const body = { name: "Bob", password: "wrongPassword" };
+    it('should return status 401', async () => {
+        let response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        expect(response.status).to.be.equal(401);
+    });
+});
+
+describe('Sending an invalid POST (wrong user)', () => {
+    const body = { name: "wrongUser", password: "wrongPassword" };
+    it('should return status 401', async () => {
+        let response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        expect(response.status).to.be.equal(401);
+    });
+});

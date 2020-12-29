@@ -1,8 +1,6 @@
 const REDIS_HOST = process.env.REDIS_HOST || 'redis';
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
 const redis = require('redis');
-//const { promisifyAll } = require('bluebird');
-//promisifyAll(redis);
 const OPTIONS = {
     host: REDIS_HOST,
     port: REDIS_PORT

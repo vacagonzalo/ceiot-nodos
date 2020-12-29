@@ -19,3 +19,6 @@ docker run \
 -p $MACHINE_PORT:$CONTAINER_PORT \
 -d \
 $IMAGE_NAME
+
+printf "waiting for 5 seconds"
+sleep 5
