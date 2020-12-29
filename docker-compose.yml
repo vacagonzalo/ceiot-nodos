@@ -51,8 +51,6 @@ services:
         command: mongod --bind_ip_all --port 27017
         expose: 
             - '27017'
-        ports: # added to test pymongo
-            - '27017:27017'
         volumes: 
             - ./mongodb/scripts:/scripts
         networks:
@@ -83,4 +81,12 @@ services:
         depends_on: 
             - 'mongo'
         networks: 
-            -   iot
+            - iot
+    redis:
+        image: redis
+        container_name: redis
+        hostname: redis
+        expose:
+            - '6379'
+        networks: 
+            - iot
