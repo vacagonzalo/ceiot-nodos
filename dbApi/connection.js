@@ -4,7 +4,8 @@ const db = mongoose.connection;
 mongoose.connect(DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
 }).catch(err => console.log(err));
 
 db.once('open', _ => {
