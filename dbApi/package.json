@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "npm install",
-    "dev": "./mockDB/mongo.sh && eval $(cat ./enviroment/dev.env) nodemon index.js",
+    "dev": "./mockDB/mongo.sh && ./mockDB/redis.sh && eval $(cat ./.env) nodemon index.js",
     "production": "eval $(cat ./enviroment/.env) node index.js",
-    "test": "clear && ./mockDB/restart.sh && eval $(cat ./enviroment/dev.env) mocha",
-    "clean": "docker stop mongodb"
+    "test": "clear && ./mockDB/restart.sh && eval $(cat ./.env) mocha",
+    "clean": "docker stop mongo && docker stop redis"
   },
   "keywords": [
     "iot",
@@ -24,7 +24,8 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.11.8"
+    "mongoose": "^5.11.8",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",

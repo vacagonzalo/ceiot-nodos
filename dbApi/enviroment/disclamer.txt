@@ -1,4 +1,0 @@
-This is an academic project, the enviroment variables are being pushed to the
-repository.
-In a normal situation this should not happend.
-Remember to add your .env to your .gitignore
