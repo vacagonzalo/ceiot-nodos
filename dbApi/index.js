@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('./connection');
 require('./cache');
+require('./broker');
 const PORT = process.env.PORT || 8080;
 const app = express();
 app.use(cors());

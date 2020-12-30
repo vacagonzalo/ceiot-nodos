@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const cache = require('../cache');
+const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
 
 router.get('/', (req, res) => {
     try {
@@ -14,6 +15,7 @@ router.get('/', (req, res) => {
                 }
                 if (reply) {
                     let data = await User.find({}, { _id: 0, password: 0, __v: 0 });
+                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                     res.status(200).send(data);
                     return;
                 }
@@ -54,6 +56,7 @@ router.post('/', (req, res) => {
                             rank: body.rank
                         });
                         await user.save();
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                         res.sendStatus(201);
                         return;
                     }
@@ -88,6 +91,7 @@ router.put('/', (req, res) => {
                         }
                     );
                     if (updated) {
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                         res.sendStatus(200);
                         return;
                     } else {
@@ -119,6 +123,7 @@ router.delete('/', async (req, res) => {
                     const body = req.body;
                     let deleted = await User.findOneAndDelete({ name: body.name });
                     if (deleted) {
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                         res.sendStatus(202);
                     } else {
                         res.sendStatus(403);
