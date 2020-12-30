@@ -1,10 +1,11 @@
-const DB_URL = 'mongodb://mongo:27017/gador'//process.env.DB_URL;
+const DB_URL = process.env.DB_URL || 'mongodb://mongo:27017/gador';
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 mongoose.connect(DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
 }).catch(err => console.log(err));
 
 db.once('open', _ => {

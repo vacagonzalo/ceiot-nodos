@@ -1,74 +1,100 @@
 const express = require('express');
 const router = express.Router();
 const Device = require('../models/Device');
-
-router.get('', async (req, res) => {
+const cache = require('../cache');
+router.get('', (req, res) => {
     try {
-        let data = await Device.find({}, { _id: 0, __v: 0 });
-        res.status(200).send(data);
-    } catch (err) {
-        res.sendStatus(500);
-    }
-});
-
-router.get('/:tag', async (req, res) => {
-    try {
-        let device = await Device.findOne(
-            { tag: req.params.tag },
-            { _id: 0, __v: 0 }
-        );
-        if (device) {
-            res.status(200).send(device);
-        } else {
-            res.sendStatus(204);
-        }
-    } catch (err) {
-
-    }
-});
-
-router.post('', async (req, res) => {
-    try {
-        let body = req.body;
-        let dupplicated = await Device.findOne(
-            { $or: [{ serial: body.serial }, { tag: body.tag }] },
-            {}
-        );
-        if (dupplicated) {
-            res.sendStatus(403);
-        } else {
-            let device = new Device({
-                serial: body.serial,
-                tag: body.tag,
-                modbus: body.modbus,
-                frec: body.frec,
-                unit: body.unit
+        if(req.headers.authorization) {
+            cache.GET(req.headers.authorization, async (error, reply) => {
+                if(error) {
+                    res.sendStatus(401);
+                    return;
+                }
+                if(reply) {
+                    let data = await Device.find({}, { _id: 0, __v: 0 });
+                    res.status(200).send(data);
+                    return;
+                }
+                res.sendStatus(401);
+                return;
             });
-            await device.save();
-            res.sendStatus(201);
-        }
-    } catch (err) {
-        console.log(err);
-        res.sendStatus(500);
-    }
-});
-
-router.put('/', async (req, res) => {
-    try {
-        const body = req.body;
-        const filter = { serial: body.serial };
-        const update = {
-            tag: body.tag,
-            modbus: body.modbus,
-            frec: body.frec,
-            unit: body.unit
-        }
-        await Device.findOneAndUpdate(filter, update);
-        let device = await Device.findOne(filter, { _id: 0, __v: 0 });
-        if (device) {
-            res.status(200).send(device);
         } else {
-            res.sendStatus(403);
+            res.sendStatus(401);
+        }
+    } catch (err) {
+        res.sendStatus(500);
+    }
+});
+
+router.get('/:tag', (req, res) => {
+    try {
+        if(req.headers.authorization) {
+            cache.GET(req.headers.authorization, async (error, reply) => {
+                if(error) {
+                    console.log(error);
+                    res.sendStatus(401);
+                    return;
+                }
+                if(reply) {
+                    let device = await Device.findOne(
+                        { tag: req.params.tag },
+                        { _id: 0, __v: 0 }
+                    );
+                    if (device) {
+                        res.status(200).send(device);
+                        return;
+                    } else {
+                        res.sendStatus(204);
+                    }
+                    return;
+                }
+                res.sendStatus(401);
+                return;
+            });
+        } else {
+            res.sendStatus(401);
+        }
+    } catch (err) {
+
+    }
+});
+
+router.post('', (req, res) => {
+    try {
+        if(req.headers.authorization) {
+            cache.GET(req.headers.authorization, async (error, reply) => {
+                if(error) {
+                    console.log(error);
+                    res.sendStatus(401);
+                    return;
+                }
+                if(reply) {
+                    let body = req.body;
+                    let dupplicated = await Device.findOne(
+                        { $or: [{ serial: body.serial }, { tag: body.tag }] },
+                        {}
+                    );
+                    if (dupplicated) {
+                        res.sendStatus(403);
+                        return;
+                    } else {
+                        let device = new Device({
+                            serial: body.serial,
+                            tag: body.tag,
+                            modbus: body.modbus,
+                            frec: body.frec,
+                            unit: body.unit
+                        });
+                        await device.save();
+                        res.sendStatus(201);
+                        return;
+                    }
+                }
+                res.sendStatus(401);
+                return;
+            });
+        } else {
+            res.sendStatus(401);
         }
     } catch (err) {
         console.log(err);
@@ -76,13 +102,70 @@ router.put('/', async (req, res) => {
     }
 });
 
-router.delete('/', async (req, res) => {
+router.put('/', (req, res) => {
     try {
-        let deleted = await Device.findOneAndDelete({tag: req.body.tag},{});
-        if(deleted){
-            res.sendStatus(202)
+        if(req.headers.authorization) {
+            cache.GET(req.headers.authorization, async (error, reply) => {
+                if(error) {
+                    console.log(error);
+                    res.sendStatus(401);
+                    return;
+                }
+                if(reply) {
+                    const body = req.body;
+                    const filter = { serial: body.serial };
+                    const update = {
+                        tag: body.tag,
+                        modbus: body.modbus,
+                        frec: body.frec,
+                        unit: body.unit
+                    }
+                    await Device.findOneAndUpdate(filter, update);
+                    let device = await Device.findOne(filter, { _id: 0, __v: 0 });
+                    if (device) {
+                        res.status(200).send(device);
+                        return;
+                    } else {
+                        res.sendStatus(403);
+                        return;
+                    }
+                }
+                res.sendStatus(401);
+                return;
+            });
         }else {
-            res.sendStatus(403);
+            res.sendStatus(401);
+        }
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+router.delete('/', (req, res) => {
+    try {
+        if(req.headers.authorization) {
+            cache.GET(req.headers.authorization, async (error, reply) => {
+                if(error) {
+                    console.log(error);
+                    res.sendStatus(401);
+                    return;
+                }
+                if(reply) {
+                    let deleted = await Device.findOneAndDelete({tag: req.body.tag},{});
+                    if(deleted){
+                        res.sendStatus(202);
+                        return;
+                    }else {
+                        res.sendStatus(403);
+                        return;
+                    }
+                }
+                res.sendStatus(401);
+                return;
+            });
+        } else {
+            res.sendStatus(401);
         }
     } catch (error) {
         
