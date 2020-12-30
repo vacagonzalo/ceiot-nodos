@@ -75,11 +75,15 @@ services:
         container_name: db-api
         hostname: db-api
         expose: 
+            - '1883'
+            - '6379'
             - '27017'
         ports: 
             - '8080:8080'
-        depends_on: 
+        depends_on:
+            - 'mosquitto' 
             - 'mongo'
+            - 'redis'
         networks: 
             - iot
     auth-api:

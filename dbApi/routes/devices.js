@@ -2,15 +2,19 @@ const express = require('express');
 const router = express.Router();
 const Device = require('../models/Device');
 const cache = require('../cache');
+const mqtt = require('../broker');
+const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
+
 router.get('', (req, res) => {
     try {
-        if(req.headers.authorization) {
+        if (req.headers.authorization) {
             cache.GET(req.headers.authorization, async (error, reply) => {
-                if(error) {
+                if (error) {
                     res.sendStatus(401);
                     return;
                 }
-                if(reply) {
+                if (reply) {
+                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                     let data = await Device.find({}, { _id: 0, __v: 0 });
                     res.status(200).send(data);
                     return;
@@ -28,19 +32,20 @@ router.get('', (req, res) => {
 
 router.get('/:tag', (req, res) => {
     try {
-        if(req.headers.authorization) {
+        if (req.headers.authorization) {
             cache.GET(req.headers.authorization, async (error, reply) => {
-                if(error) {
+                if (error) {
                     console.log(error);
                     res.sendStatus(401);
                     return;
                 }
-                if(reply) {
+                if (reply) {
                     let device = await Device.findOne(
                         { tag: req.params.tag },
                         { _id: 0, __v: 0 }
                     );
                     if (device) {
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                         res.status(200).send(device);
                         return;
                     } else {
@@ -61,14 +66,14 @@ router.get('/:tag', (req, res) => {
 
 router.post('', (req, res) => {
     try {
-        if(req.headers.authorization) {
+        if (req.headers.authorization) {
             cache.GET(req.headers.authorization, async (error, reply) => {
-                if(error) {
+                if (error) {
                     console.log(error);
                     res.sendStatus(401);
                     return;
                 }
-                if(reply) {
+                if (reply) {
                     let body = req.body;
                     let dupplicated = await Device.findOne(
                         { $or: [{ serial: body.serial }, { tag: body.tag }] },
@@ -85,7 +90,9 @@ router.post('', (req, res) => {
                             frec: body.frec,
                             unit: body.unit
                         });
+                        mqtt.publish(`config/${device.tag}`, `${device.frec}`);
                         await device.save();
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                         res.sendStatus(201);
                         return;
                     }
@@ -104,14 +111,14 @@ router.post('', (req, res) => {
 
 router.put('/', (req, res) => {
     try {
-        if(req.headers.authorization) {
+        if (req.headers.authorization) {
             cache.GET(req.headers.authorization, async (error, reply) => {
-                if(error) {
+                if (error) {
                     console.log(error);
                     res.sendStatus(401);
                     return;
                 }
-                if(reply) {
+                if (reply) {
                     const body = req.body;
                     const filter = { serial: body.serial };
                     const update = {
@@ -123,6 +130,7 @@ router.put('/', (req, res) => {
                     await Device.findOneAndUpdate(filter, update);
                     let device = await Device.findOne(filter, { _id: 0, __v: 0 });
                     if (device) {
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                         res.status(200).send(device);
                         return;
                     } else {
@@ -133,7 +141,7 @@ router.put('/', (req, res) => {
                 res.sendStatus(401);
                 return;
             });
-        }else {
+        } else {
             res.sendStatus(401);
         }
     } catch (err) {
@@ -144,19 +152,20 @@ router.put('/', (req, res) => {
 
 router.delete('/', (req, res) => {
     try {
-        if(req.headers.authorization) {
+        if (req.headers.authorization) {
             cache.GET(req.headers.authorization, async (error, reply) => {
-                if(error) {
+                if (error) {
                     console.log(error);
                     res.sendStatus(401);
                     return;
                 }
-                if(reply) {
-                    let deleted = await Device.findOneAndDelete({tag: req.body.tag},{});
-                    if(deleted){
+                if (reply) {
+                    let deleted = await Device.findOneAndDelete({ tag: req.body.tag }, {});
+                    if (deleted) {
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                         res.sendStatus(202);
                         return;
-                    }else {
+                    } else {
                         res.sendStatus(403);
                         return;
                     }
@@ -168,7 +177,7 @@ router.delete('/', (req, res) => {
             res.sendStatus(401);
         }
     } catch (error) {
-        
+
     }
 });
 
