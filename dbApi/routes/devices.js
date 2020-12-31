@@ -26,6 +26,7 @@ router.get('', (req, res) => {
             res.sendStatus(401);
         }
     } catch (err) {
+        console.log(err)
         res.sendStatus(500);
     }
 });
@@ -60,7 +61,8 @@ router.get('/:tag', (req, res) => {
             res.sendStatus(401);
         }
     } catch (err) {
-
+        console.log(err);
+        res.sendStatus(500);
     }
 });
 
@@ -90,7 +92,7 @@ router.post('', (req, res) => {
                             frec: body.frec,
                             unit: body.unit
                         });
-                        mqtt.publish(`config/${device.tag}`, `${device.frec}`);
+                        mqtt.publish(`cmnd/${device.tag}/frec`, `${device.frec}`);
                         await device.save();
                         cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
                         res.sendStatus(201);
@@ -177,7 +179,8 @@ router.delete('/', (req, res) => {
             res.sendStatus(401);
         }
     } catch (error) {
-
+        console.log(error)
+        res.sendStatus(500);
     }
 });
 

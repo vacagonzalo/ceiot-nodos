@@ -23,10 +23,14 @@ services:
         restart: always
         volumes: 
             - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+            - ./mosquitto/users.txt:/mosquitto/config/users.txt
+            - ./mosquitto/acl.txt:/mosquitto/config/acl.txt
         expose: 
             - '1883'
+            - '9001'
         ports: 
             - '1883:1883'
+            - '9001:9001'
         networks: 
             - iot
     hrv:

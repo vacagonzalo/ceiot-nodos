@@ -1,0 +1,11 @@
+user docker
+topic readwrite cmnd/#
+topic read data/#
+
+user device
+topic readwrite cmnd/#
+topic write data/#
+topic write live/#
+
+user frontend
+topic read live/#

@@ -55,6 +55,7 @@ def onMessage(client, userdata, msg):
 
 client = paho.Client()
 client.on_message = onMessage
+client.username_pw_set('docker','container')
 
 if client.connect("mosquitto", 1883, 60) != 0:
     print("Could not connect to MQTT Broker")
