@@ -4,7 +4,10 @@ const User = require('../models/User');
 const cache = require('../cache');
 const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
 
-router.get('/', (req, res) => {
+const bcrypt = require('bcrypt');
+const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
+
+router.get('/all', (req, res) => {
     try {
         if (req.headers.authorization) {
             cache.GET(req.headers.authorization, async (error, reply) => {
@@ -30,7 +33,7 @@ router.get('/', (req, res) => {
     }
 });
 
-router.post('/', (req, res) => {
+router.post('/new', (req, res) => {
     try {
         if (req.headers.authorization) {
             cache.GET(req.headers.authorization, async (error, reply) => {
@@ -49,10 +52,13 @@ router.post('/', (req, res) => {
                         res.sendStatus(403)
                         return;
                     } else {
+                        const SALT = bcrypt.genSaltSync(SALT_ROUNDS);
+                        const HASH = bcrypt.hashSync(body.password, SALT);
+                        console.log(HASH);
                         let user = new User({
                             name: body.name,
                             email: body.email,
-                            password: body.password,
+                            password: HASH,
                             rank: body.rank
                         });
                         await user.save();
