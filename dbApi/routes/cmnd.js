@@ -4,6 +4,8 @@ const cache = require('../cache');
 const mqtt = require('../broker');
 const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
 
+const ENGINEER = 2;
+
 router.get('/reset', (req, res) => {
     try {
         if (req.headers.authorization) {
@@ -13,10 +15,12 @@ router.get('/reset', (req, res) => {
                     return;
                 }
                 if (reply) {
-                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                    mqtt.publish(`cmnd/reset-all`, "reset");
-                    res.sendStatus(200);
-                    return;
+                    if (reply >= ENGINEER) {
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                        mqtt.publish(`cmnd/reset-all`, "reset");
+                        res.sendStatus(200);
+                        return;
+                    }
                 }
                 res.sendStatus(401);
                 return;
@@ -39,10 +43,12 @@ router.get('/reset/:tag', (req, res) => {
                     return;
                 }
                 if (reply) {
-                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                    mqtt.publish(`cmnd/${req.params.tag}`, "reset");
-                    res.sendStatus(200);
-                    return;
+                    if (reply >= ENGINEER) {
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                        mqtt.publish(`cmnd/${req.params.tag}`, "reset");
+                        res.sendStatus(200);
+                        return;
+                    }
                 }
                 res.sendStatus(401);
                 return;
@@ -65,10 +71,12 @@ router.get('/calibrate/:tag', (req, res) => {
                     return;
                 }
                 if (reply) {
-                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                    mqtt.publish(`cmnd/${req.params.tag}`, "live");
-                    res.sendStatus(200);
-                    return;
+                    if (reply >= ENGINEER) {
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                        mqtt.publish(`cmnd/${req.params.tag}`, "live");
+                        res.sendStatus(200);
+                        return;
+                    }
                 }
                 res.sendStatus(401);
                 return;

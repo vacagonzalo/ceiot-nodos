@@ -4,6 +4,8 @@ const Measurement = require('../models/Measurement');
 const cache = require('../cache');
 const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
 
+const READER = 1;
+
 router.get('/all', (req, res) => {
     try {
         if (req.headers.authorization) {
@@ -13,10 +15,12 @@ router.get('/all', (req, res) => {
                     return;
                 }
                 if (reply) {
-                    let data = await Measurement.find({}, { _id: 0, __v: 0 });
-                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                    res.status(200).send(data);
-                    return;
+                    if (reply >= READER) {
+                        let data = await Measurement.find({}, { _id: 0, __v: 0 });
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                        res.status(200).send(data);
+                        return;
+                    }
                 }
                 res.sendStatus(401);
                 return;
@@ -39,13 +43,15 @@ router.get('/all/:device', (req, res) => {
                     return;
                 }
                 if (reply) {
-                    let device = req.params.device;
-                    let data = await Measurement.find(
-                        { tag: device },
-                        { _id: 0, __v: 0 });
-                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                    res.status(200).send(data);
-                    return;
+                    if (reply >= READER) {
+                        let device = req.params.device;
+                        let data = await Measurement.find(
+                            { tag: device },
+                            { _id: 0, __v: 0 });
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                        res.status(200).send(data);
+                        return;
+                    }
                 }
                 res.sendStatus(401);
                 return;
@@ -67,14 +73,16 @@ router.get('/year', (req, res) => {
                     return;
                 }
                 if (reply) {
-                    let date = new Date();
-                    date.setDate(date.getDate() - 365);
-                    let data = await Measurement.find(
-                        { date: { $gte: date } },
-                        { _id: 0, __v: 0 });
-                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                    res.status(200).send(data);
-                    return;
+                    if (reply >= READER) {
+                        let date = new Date();
+                        date.setDate(date.getDate() - 365);
+                        let data = await Measurement.find(
+                            { date: { $gte: date } },
+                            { _id: 0, __v: 0 });
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                        res.status(200).send(data);
+                        return;
+                    }
                 }
                 res.sendStatus(401);
                 return;
@@ -97,18 +105,20 @@ router.get('/year/:device', (req, res) => {
                     return;
                 }
                 if (reply) {
-                    let device = req.params.device;
-                    let date = new Date();
-                    date.setDate(date.getDate() - 365);
-                    let data = await Measurement.find(
-                        {
-                            $and: [{ tag: device },
-                            { date: { $gte: date } }]
-                        },
-                        { _id: 0, __v: 0 });
-                    cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                    res.status(200).send(data);
-                    return;
+                    if (reply >= READER) {
+                        let device = req.params.device;
+                        let date = new Date();
+                        date.setDate(date.getDate() - 365);
+                        let data = await Measurement.find(
+                            {
+                                $and: [{ tag: device },
+                                { date: { $gte: date } }]
+                            },
+                            { _id: 0, __v: 0 });
+                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                        res.status(200).send(data);
+                        return;
+                    }
                 }
                 res.sendStatus(401);
                 return;
