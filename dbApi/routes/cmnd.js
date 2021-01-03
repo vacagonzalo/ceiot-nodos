@@ -53,7 +53,7 @@ router.get('/reset/:tag', (req, res) => {
                 if (reply) {
                     if (reply >= ENGINEER) {
                         cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                        mqtt.publish(`cmnd/${req.params.tag}`, "reset");
+                        mqtt.publish(`cmnd/${req.params.tag}/reset`, "reset");
                         let log = new Log({
                             timestamp: new Date(),
                             endpoint: `GET:/cmnd/reset/${req.params.tag}`,
@@ -88,7 +88,7 @@ router.get('/calibrate/:tag', (req, res) => {
                 if (reply) {
                     if (reply >= ENGINEER) {
                         cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                        mqtt.publish(`cmnd/${req.params.tag}`, "live");
+                        mqtt.publish(`cmnd/${req.params.tag}/calibrate`, "live");
                         let log = new Log({
                             timestamp: new Date(),
                             endpoint: `GET:/cmnd/calibrate/${req.params.tag}`,
