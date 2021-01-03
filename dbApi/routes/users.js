@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Log = require('../models/Log');
 const User = require('../models/User');
 const cache = require('../cache');
 const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
@@ -11,7 +12,7 @@ const ADMINISTRATOR = 3;
 
 router.get('/all', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -39,7 +40,7 @@ router.get('/all', (req, res) => {
 
 router.post('/new', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -67,6 +68,13 @@ router.post('/new', (req, res) => {
                             });
                             await user.save();
                             cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                            let log = new Log({
+                                timestamp: new Date(),
+                                endpoint: `POST:/users/new`,
+                                user: req.headers['user-agent'],
+                                body: `${body.name},${body.email},${body.rank}`
+                            });
+                            await log.save();
                             res.sendStatus(201);
                             return;
                         }
@@ -86,7 +94,7 @@ router.post('/new', (req, res) => {
 
 router.put('/change/rank', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -102,6 +110,13 @@ router.put('/change/rank', (req, res) => {
                         );
                         if (updated) {
                             cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                            let log = new Log({
+                                timestamp: new Date(),
+                                endpoint: `PUT:/users/change/rank`,
+                                user: req.headers['user-agent'],
+                                body: `${body.name},${body.rank}`
+                            });
+                            await log.save();
                             res.sendStatus(200);
                             return;
                         } else {
@@ -125,7 +140,7 @@ router.put('/change/rank', (req, res) => {
 
 router.put('/reset/password', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -143,6 +158,13 @@ router.put('/reset/password', (req, res) => {
                         );
                         if (updated) {
                             cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                            let log = new Log({
+                                timestamp: new Date(),
+                                endpoint: `PUT:/users/reset/password`,
+                                user: req.headers['user-agent'],
+                                body: `${body.name}`
+                            });
+                            await log.save();
                             res.sendStatus(200);
                             return;
                         } else {
@@ -166,7 +188,7 @@ router.put('/reset/password', (req, res) => {
 
 router.put('/change/password', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -182,6 +204,13 @@ router.put('/change/password', (req, res) => {
                             const HASH = bcrypt.hashSync(body.newPassword, SALT);
                             user.password = HASH;
                             await user.save({ isNew: false });
+                            let log = new Log({
+                                timestamp: new Date(),
+                                endpoint: `PUT:/users/change/password`,
+                                user: req.headers['user-agent'],
+                                body: `${body.name}`
+                            });
+                            await log.save();
                             res.sendStatus(200);
                             return;
                         } else {
@@ -205,7 +234,7 @@ router.put('/change/password', (req, res) => {
 
 router.delete('/', async (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -218,6 +247,13 @@ router.delete('/', async (req, res) => {
                         let deleted = await User.findOneAndDelete({ name: body.name });
                         if (deleted) {
                             cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                            let log = new Log({
+                                timestamp: new Date(),
+                                endpoint: `DELETE:/users`,
+                                user: req.headers['user-agent'],
+                                body: `${body.name}`
+                            });
+                            await log.save();
                             res.sendStatus(202);
                             return;
                         } else {

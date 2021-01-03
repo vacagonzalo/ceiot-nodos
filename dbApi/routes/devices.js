@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Device = require('../models/Device');
+const Log = require('../models/Log');
 const cache = require('../cache');
 const mqtt = require('../broker');
 const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
@@ -10,7 +11,7 @@ const ENGINEER = 2;
 
 router.get('', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     res.sendStatus(401);
@@ -38,7 +39,7 @@ router.get('', (req, res) => {
 
 router.get('/:tag', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -75,7 +76,7 @@ router.get('/:tag', (req, res) => {
 
 router.post('', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -103,6 +104,13 @@ router.post('', (req, res) => {
                             mqtt.publish(`cmnd/${device.tag}/frec`, `${device.frec}`);
                             await device.save();
                             cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                            let log = new Log({
+                                timestamp: new Date(),
+                                endpoint: `POST:/devices`,
+                                user: req.headers['user-agent'],
+                                body: `${body.serial},${body.tag},${body.modbus},${body.frec},${body.unit}`
+                            });
+                            await log.save();
                             res.sendStatus(201);
                             return;
                         }
@@ -122,7 +130,7 @@ router.post('', (req, res) => {
 
 router.put('/', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -143,6 +151,13 @@ router.put('/', (req, res) => {
                         let device = await Device.findOne(filter, { _id: 0, __v: 0 });
                         if (device) {
                             cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                            let log = new Log({
+                                timestamp: new Date(),
+                                endpoint: `PUT:/devices`,
+                                user: req.headers['user-agent'],
+                                body: `${body.tag},${body.modbus},${body.frec},${body.unit}`
+                            });
+                            await log.save();
                             res.status(200).send(device);
                             return;
                         } else {
@@ -165,7 +180,7 @@ router.put('/', (req, res) => {
 
 router.delete('/', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -177,6 +192,13 @@ router.delete('/', (req, res) => {
                         let deleted = await Device.findOneAndDelete({ tag: req.body.tag }, {});
                         if (deleted) {
                             cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+                            let log = new Log({
+                                timestamp: new Date(),
+                                endpoint: `DELETE:/devices`,
+                                user: req.headers['user-agent'],
+                                body: `${body.tag}`
+                            });
+                            await log.save();
                             res.sendStatus(202);
                             return;
                         } else {

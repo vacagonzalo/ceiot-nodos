@@ -8,7 +8,7 @@ const READER = 1;
 
 router.get('/all', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     res.sendStatus(401);
@@ -35,7 +35,7 @@ router.get('/all', (req, res) => {
 
 router.get('/all/:device', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
@@ -66,7 +66,7 @@ router.get('/all/:device', (req, res) => {
 
 router.get('/year', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     res.sendStatus(401);
@@ -97,7 +97,7 @@ router.get('/year', (req, res) => {
 
 router.get('/year/:device', (req, res) => {
     try {
-        if (req.headers.authorization) {
+        if (req.headers.authorization && req.headers['user-agent']) {
             cache.GET(req.headers.authorization, async (error, reply) => {
                 if (error) {
                     console.log(error);
