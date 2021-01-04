@@ -12,4 +12,5 @@ app.use('/readings', require('./routes/readings'));
 app.use('/devices', require('./routes/devices'));
 app.use('/users', require('./routes/users'));
 app.use('/cmnd', require('./routes/cmnd'));
+app.use('/logs', require('./routes/log'));
 app.listen(PORT, () => { console.log(`Server running on port ${PORT}`); });
