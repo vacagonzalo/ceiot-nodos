@@ -1,6 +1,6 @@
-<app-header></app-header>
+<app-header (toggleSideBarForMe)="sideBarToggler()"></app-header>
 <mat-sidenav-container class="payload">
-    <mat-sidenav mode="over" opened>
+    <mat-sidenav mode="side" [opened]="sideBarOpen">
         <app-devices></app-devices>
     </mat-sidenav>
     <mat-sidenav-content>
