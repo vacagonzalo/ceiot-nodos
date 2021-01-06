@@ -1,4 +1,9 @@
-<app-header></app-header>
-<app-devices></app-devices>
-<router-outlet></router-outlet>
-<app-footer></app-footer>
+<app-header (toggleSideBarForMe)="sideBarToggler()"></app-header>
+<mat-sidenav-container class="payload">
+    <mat-sidenav mode="side" [opened]="sideBarOpen">
+        <app-devices></app-devices>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>
