@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -41,7 +41,11 @@ import { CredentialsInterceptorService } from './services/credentials-intercepto
     FormsModule,
     HttpClientModule
   ],
-  providers: [AuthService, AuthGuard, CredentialsInterceptorService],
+  providers: [AuthService, AuthGuard, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: CredentialsInterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -49,4 +49,12 @@ export class AuthService {
   getToken() {
     return localStorage.getItem('token');
   }
+
+  getRank() {
+    return localStorage.getItem('rank');
+  }
+
+  getUser() {
+    return localStorage.getItem('user');
+  }
 }

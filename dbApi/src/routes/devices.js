@@ -4,35 +4,53 @@ const Device = require('../models/Device');
 const Log = require('../models/Log');
 const cache = require('../cache');
 const mqtt = require('../broker');
-const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
+const jwt = require('jsonwebtoken');
 
+const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
+const SECRET_KEY = process.env.SECRET_KEY || 'secret';
 const ASSISTANT = 1;
 const ENGINEER = 2;
 
-router.get('', (req, res) => {
+function verifyToken(req, res, next) {
+    if(!req.headers.authorization) {
+        return res.sendStatus(401);
+    }
+    let token = req.headers.authorization.split(' ')[1];
+    if(token === 'null') {
+        return res.sendStatus(401);
+    }
+    let payload = jwt.verify(token, SECRET_KEY);
+    if(!payload) {
+        return res.sendStatus(401);
+    }
     try {
-        if (req.headers.authorization && req.headers['user-agent']) {
-            cache.GET(req.headers.authorization, async (error, reply) => {
-                if (error) {
-                    res.sendStatus(401);
-                    return;
-                }
-                if (reply) {
-                    if (reply >= ASSISTANT) {
-                        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                        let data = await Device.find({}, { _id: 0, __v: 0 });
-                        res.status(200).send(data);
-                        return;
-                    }
-                }
-                res.sendStatus(401);
-                return;
-            });
-        } else {
-            res.sendStatus(401);
+        cache.GET(req.headers.authorization, async (error, reply) => {
+            if(error) {
+                return res.sendStatus(401);
+            }
+            if(!reply) {
+                return res.sendStatus(401);
+            }
+
+        });
+        req.userId = payload.subject;
+        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
+        next();
+    } catch (error) {
+        console.log(`catch: ${error}`)
+        return res.sendStatus(401);
+    }
+}
+
+
+router.get('', verifyToken, async (req, res) => {
+    try {
+        let devices = await Device.find({},{ _id: 0, __v: 0 });
+        if(!devices) {
+            res.sendStatus(500);
         }
-    } catch (err) {
-        console.log(err)
+        res.send(devices);
+    } catch (error) {
         res.sendStatus(500);
     }
 });
