@@ -1,0 +1,8 @@
+.myform {
+    width: 80%;
+    max-width: 300px;
+    padding: 16px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}

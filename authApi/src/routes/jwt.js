@@ -17,7 +17,11 @@ router.post('/', async (req, res) => {
                 let payload = { subject: user._id };
                 let token = jwt.sign(payload, SECRET_KEY);
                 cache.SETEX(token, TIME_TO_LIVE, user.rank);
-                res.status(201).send(token);
+                res.status(201).send({
+                    user: user.name,
+                    rank: user.rank,
+                    token: token
+                });
             } else {
                 res.sendStatus(401);
             }
