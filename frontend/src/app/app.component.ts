@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontend';
-  public sideBarOpen:boolean = true;
+  public sideBarOpen:boolean = false;
 
   sideBarToggler() {
     this.sideBarOpen = !this.sideBarOpen;

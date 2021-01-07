@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +16,9 @@ import { DeviceDetailComponent } from './device-detail/device-detail.component';
 import { LoginComponent } from './login/login.component';
 import { DeviceCalibrationComponent } from './device-calibration/device-calibration.component';
 import { DeviceReadingsComponent } from './device-readings/device-readings.component';
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './auth.guard';
+import { CredentialsInterceptorService } from './services/credentials-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -34,9 +38,10 @@ import { DeviceReadingsComponent } from './device-readings/device-readings.compo
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [AuthService, AuthGuard, CredentialsInterceptorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

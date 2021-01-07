@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanActivate } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { UsersComponent } from './users/users.component';
@@ -8,6 +8,7 @@ import { DeviceDetailComponent } from './device-detail/device-detail.component';
 import { DeviceReadingsComponent } from './device-readings/device-readings.component';
 import { DeviceCalibrationComponent } from './device-calibration/device-calibration.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
+import { AuthGuard } from './auth.guard';
 
 
 const routes: Routes = [
@@ -33,7 +34,8 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
@@ -41,7 +43,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   }
 ];

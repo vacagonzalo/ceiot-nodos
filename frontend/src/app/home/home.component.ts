@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  public user: string;
+  public rank: string;
   constructor() { }
 
   ngOnInit(): void {
+    this.user = localStorage.getItem('user');
+    this.rank = localStorage.getItem('rank');
   }
 
 }
