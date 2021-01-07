@@ -45,4 +45,8 @@ export class AuthService {
       !!localStorage.getItem('rank') &&
       !!localStorage.getItem('user'));
   }
+
+  getToken() {
+    return localStorage.getItem('token');
+  }
 }

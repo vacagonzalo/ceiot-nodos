@@ -18,6 +18,7 @@ import { DeviceCalibrationComponent } from './device-calibration/device-calibrat
 import { DeviceReadingsComponent } from './device-readings/device-readings.component';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './auth.guard';
+import { CredentialsInterceptorService } from './services/credentials-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { AuthGuard } from './auth.guard';
     FormsModule,
     HttpClientModule
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService, AuthGuard, CredentialsInterceptorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
