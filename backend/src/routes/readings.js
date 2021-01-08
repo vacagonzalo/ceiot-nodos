@@ -1,9 +1,9 @@
 const express = require('express');
-const router = express.Router();
 const Measurement = require('../models/Measurement');
-const cache = require('../cache');
-const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
+const cache = require('../connection/cache');
+const router = express.Router();
 
+const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
 const READER = 1;
 
 router.get('/all', (req, res) => {

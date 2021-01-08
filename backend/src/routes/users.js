@@ -1,13 +1,12 @@
 const express = require('express');
-const router = express.Router();
+const bcrypt = require('bcrypt');
 const Log = require('../models/Log');
 const User = require('../models/User');
-const cache = require('../cache');
-const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
+const cache = require('../connection/cache');
+const router = express.Router();
 
-const bcrypt = require('bcrypt');
 const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
-
+const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
 const ADMINISTRATOR = 3;
 
 router.get('/all', (req, res) => {

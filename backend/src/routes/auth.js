@@ -1,12 +1,12 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const router = express.Router();
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const cache = require('../cache');
+const cache = require('../connection/cache');
+const router = express.Router();
+
 const SECRET_KEY = process.env.SECRET_KEY || 'secret';
 const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
-
-const bcrypt = require('bcrypt');
 
 router.post('/', async (req, res) => {
     try {

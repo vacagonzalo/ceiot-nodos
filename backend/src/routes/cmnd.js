@@ -1,10 +1,10 @@
 const express = require('express');
-const router = express.Router();
-const cache = require('../cache');
-const mqtt = require('../broker');
+const cache = require('../connection/cache');
+const mqtt = require('../connection/broker');
 const Log = require('../models/Log');
-const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
+const router = express.Router();
 
+const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
 const ENGINEER = 2;
 
 router.get('/reset', (req, res) => {

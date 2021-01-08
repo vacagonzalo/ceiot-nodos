@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
 const Log = require('../models/Log');
-const cache = require('../cache');
+const cache = require('../connection/cache');
 const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
+const router = express.Router();
+
 const ADMINISTRATOR = 3;
 
 router.get('', (req, res) => {

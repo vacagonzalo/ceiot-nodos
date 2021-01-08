@@ -1,93 +1,34 @@
 const express = require('express');
-const router = express.Router();
 const Device = require('../models/Device');
 const Log = require('../models/Log');
-const cache = require('../cache');
-const mqtt = require('../broker');
-const jwt = require('jsonwebtoken');
+const cache = require('../connection/cache');
+const mqtt = require('../connection/broker');
+const router = express.Router();
 
 const TIME_TO_LIVE = process.env.TIME_TO_LIVE || 120;
-const SECRET_KEY = process.env.SECRET_KEY || 'secret';
 const ASSISTANT = 1;
 const ENGINEER = 2;
 
-function verifyToken(req, res, next) {
-    if(!req.headers.authorization) {
-        return res.sendStatus(401);
-    }
-    let token = req.headers.authorization.split(' ')[1];
-    if(token === 'null') {
-        return res.sendStatus(401);
-    }
-    let payload = jwt.verify(token, SECRET_KEY);
-    if(!payload) {
-        return res.sendStatus(401);
-    }
-    try {
-        cache.GET(req.headers.authorization, async (error, reply) => {
-            if(error) {
-                return res.sendStatus(401);
-            }
-            if(!reply) {
-                return res.sendStatus(401);
-            }
-
-        });
-        req.userId = payload.subject;
-        cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-        next();
-    } catch (error) {
-        console.log(`catch: ${error}`)
-        return res.sendStatus(401);
-    }
-}
-
-
 router.get('', verifyToken, async (req, res) => {
     try {
-        let devices = await Device.find({},{ _id: 0, __v: 0 });
-        if(!devices) {
+        let devices = await Device.find({}, { _id: 0, __v: 0 });
+        if (!devices) {
             res.sendStatus(500);
         }
-        res.send(devices);
+        res.send({ devices });
     } catch (error) {
         res.sendStatus(500);
     }
 });
 
-router.get('/:tag', (req, res) => {
+router.get('/:tag', verifyToken, async (req, res) => {
     try {
-        if (req.headers.authorization && req.headers['user-agent']) {
-            cache.GET(req.headers.authorization, async (error, reply) => {
-                if (error) {
-                    console.log(error);
-                    res.sendStatus(401);
-                    return;
-                }
-                if (reply) {
-                    if (reply >= ASSISTANT) {
-                        let device = await Device.findOne(
-                            { tag: req.params.tag },
-                            { _id: 0, __v: 0 }
-                        );
-                        if (device) {
-                            cache.EXPIRE(req.headers.authorization, TIME_TO_LIVE);
-                            res.status(200).send(device);
-                            return;
-                        } else {
-                            res.sendStatus(204);
-                        }
-                        return;
-                    }
-                }
-                res.sendStatus(401);
-                return;
-            });
-        } else {
-            res.sendStatus(401);
+        let device = await Device.findOne({ tag: req.params.tag }, { _id: 0, __v: 0 });
+        if (!device) {
+            res.sendStatus(500);
         }
-    } catch (err) {
-        console.log(err);
+        res.send({ device });
+    } catch (error) {
         res.sendStatus(500);
     }
 });
@@ -236,5 +177,37 @@ router.delete('/', (req, res) => {
         res.sendStatus(500);
     }
 });
+
+// middleware
+
+function verifyToken(req, res, next) {
+    try {
+        if (!req.headers.authorization) {
+            console.log('no auth in header');
+            return res.sendStatus(401);
+        }
+        let token = req.headers.authorization.split(' ')[1];
+        if (token === 'null') {
+            console.log('no auth null');
+
+            return res.sendStatus(401);
+        }
+        cache.GET(token, async (error, reply) => {
+            if (error) {
+                console.log('cache error');
+                return res.sendStatus(401);
+            }
+            if (!reply) {
+                console.log('token not found in cache');
+                return res.sendStatus(401);
+            }
+            cache.EXPIRE(token, TIME_TO_LIVE);
+            next();
+        });
+    } catch (error) {
+        console.log(`catch: ${error}`)
+        return res.sendStatus(401);
+    }
+}
 
 module.exports = router;
