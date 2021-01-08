@@ -90,21 +90,6 @@ services:
             - 'redis'
         networks: 
             - iot
-    auth-api:
-        build: ./authApi
-        image: vaca/auth-api
-        container_name: auth-api
-        hostname: auth-api
-        expose: 
-            - '6379'
-            - '27017'
-        ports: 
-            - '8090:8080'
-        depends_on: 
-            - 'mongo'
-            - 'redis'
-        networks: 
-            - iot
     redis:
         image: redis
         container_name: redis
