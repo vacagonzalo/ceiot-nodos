@@ -73,7 +73,7 @@ services:
             - 'mongo'
         networks: 
             - iot
-    db-api:
+    backend:
         build: ./dbApi
         image: vaca/db-api
         container_name: db-api
