@@ -74,10 +74,10 @@ services:
         networks: 
             - iot
     backend:
-        build: ./dbApi
-        image: vaca/db-api
-        container_name: db-api
-        hostname: db-api
+        build: ./backend
+        image: vaca/backend
+        container_name: backend
+        hostname: backend
         expose: 
             - '1883'
             - '6379'

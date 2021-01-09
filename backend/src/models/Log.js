@@ -7,6 +7,11 @@ const logSchema = new Schema(
             unique: false,
             required: true
         },
+        method: {
+            type: String,
+            unique: false,
+            required: true
+        },
         endpoint: {
             type: String,
             unique: false,
