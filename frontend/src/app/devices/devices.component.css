@@ -1,0 +1,9 @@
+.device-card {
+    width: 80%;
+    max-width: 250px;
+    padding: 16px;
+    margin: auto;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+  }

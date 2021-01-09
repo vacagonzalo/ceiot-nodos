@@ -7,7 +7,7 @@ import { Credentials } from '../models/credentials';
 })
 export class AuthService {
 
-  private url: string = "http://localhost:8090/";
+  private url: string = "http://localhost:8080/auth/";
 
   constructor(private http: HttpClient) { }
   signIn(name: string, password: string): Promise<boolean> {

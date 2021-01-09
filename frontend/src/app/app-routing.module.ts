@@ -9,28 +9,39 @@ import { DeviceReadingsComponent } from './device-readings/device-readings.compo
 import { DeviceCalibrationComponent } from './device-calibration/device-calibration.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { AuthGuard } from './auth.guard';
+import { DevicesComponent } from './devices/devices.component';
 
 
 const routes: Routes = [
   {
     path: 'users/:name',
-    component: UserDetailComponent
+    component: UserDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'users',
-    component: UsersComponent
+    component: UsersComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'devices/:tag/detail',
-    component: DeviceDetailComponent
+    component: DeviceDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'devices/:tag/readings',
-    component: DeviceReadingsComponent
+    component: DeviceReadingsComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'devices/:tag/calibration',
-    component: DeviceCalibrationComponent
+    component: DeviceCalibrationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'devices',
+    component: DevicesComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'home',

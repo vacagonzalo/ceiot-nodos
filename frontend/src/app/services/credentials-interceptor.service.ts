@@ -12,7 +12,8 @@ export class CredentialsInterceptorService implements HttpInterceptor{
   intercept(req, next) {
     let credentials = req.clone({
       setHeaders: {
-        Autorization: `Bearer ${this.auth.getToken()}`
+        'Content-Type': "application/json",
+        Authorization: `Bearer ${this.auth.getToken()}`
       }
     });
     return next.handle(credentials);

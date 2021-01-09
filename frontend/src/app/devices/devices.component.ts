@@ -1,27 +1,21 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
-import { Device } from '../models/device';
+import { Component, OnInit } from '@angular/core';
 import { DevicesService } from '../services/devices.service';
+import { Devices } from '../models/devices';
 
 @Component({
   selector: 'app-devices',
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.css']
 })
-export class DevicesComponent implements OnInit, OnChanges {
-  public devices: Array<Device>;
+export class DevicesComponent implements OnInit {
+  public list: Devices;
   constructor(private dServ: DevicesService) { }
 
   ngOnInit(): void {
     this.updateDeviceList();
-    console.log(`devices: ${this.devices}`);
-  }
-
-  ngOnChanges() {
-    this.updateDeviceList();
-    console.log(`devices: ${this.devices}`);
   }
 
   async updateDeviceList() {
-    this.devices = await this.dServ.getAll();
+    this.list = await this.dServ.getAll();
   }
 }

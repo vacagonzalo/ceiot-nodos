@@ -19,6 +19,7 @@ import { DeviceReadingsComponent } from './device-readings/device-readings.compo
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './auth.guard';
 import { CredentialsInterceptorService } from './services/credentials-interceptor.service';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { CredentialsInterceptorService } from './services/credentials-intercepto
     DeviceDetailComponent,
     LoginComponent,
     DeviceCalibrationComponent,
-    DeviceReadingsComponent
+    DeviceReadingsComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
