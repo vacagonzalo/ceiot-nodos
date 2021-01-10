@@ -1,3 +1,7 @@
+<button mat-fab color="primary" class="newDevice" *ngIf="auth.loggedIn()">
+    <mat-icon>add</mat-icon>
+</button>
+
 <mat-card *ngFor="let device of list.devices" class="device-card">
     <mat-card-header>
         <mat-card-title>
@@ -6,8 +10,9 @@
         <mat-icon *ngIf="device.unit == 't'">ac_unit</mat-icon>
         <mat-icon *ngIf="device.unit == 'h'">format_color_reset</mat-icon>
     </mat-card-header>
-    <mat-card-content>
-        <p>modbus: {{device.modbus}}</p>
-        <p>Frecuencia: {{device.frec}} minutos</p>
+    <mat-card-content class="container">
+        <button mat-raised-button (click)="detail(device.tag)">Detalles</button>
+        <button mat-raised-button (click)="readings(device.tag)">Lecturas</button>
+        <button mat-raised-button (click)="calibrate(device.tag)" color="warn">Calibrar</button>
     </mat-card-content>
 </mat-card>
