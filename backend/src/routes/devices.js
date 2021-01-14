@@ -33,7 +33,7 @@ router.get('/:tag',
             if (!device) {
                 res.sendStatus(500);
             } else {
-                res.send({ device });
+                res.send( device );
             }
         } catch (error) {
             console.log(error);

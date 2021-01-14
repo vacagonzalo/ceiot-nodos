@@ -1,1 +1,33 @@
-<p>device-detail works!</p>
+<h1>{{device.serial}}</h1>
+<h1>{{device.tag}}</h1>
+<h1>{{device.modbus}}</h1>
+<h1>{{device.frec}}</h1>
+<h1>{{device.unit}}</h1>
+
+<div class="container">
+    <form #deviceForm="ngForm" class="myform">
+        <h1>Detalle del sensor</h1>
+        <mat-form-field appearance="fill">
+            <mat-label>Serial</mat-label>
+            <input name="name" matInput [(ngModel)]="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Tag</mat-label>
+            <input name="name" matInput [(ngModel)]="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Modbus addr</mat-label>
+            <input name="name" matInput [(ngModel)]="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Frecuencia</mat-label>
+            <input name="name" matInput [(ngModel)]="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Unidad</mat-label>
+            <input name="name" matInput [(ngModel)]="name">
+        </mat-form-field>
+        <button mat-raised-button (click)="login()">Editar</button>
+        <button mat-raised-button color="warn" (click)="login()" class="erase">Borrar</button>
+    </form>
+</div>
