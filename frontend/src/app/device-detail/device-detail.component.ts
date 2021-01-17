@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 import { Device } from '../models/device';
 import { DevicesService } from '../services/devices.service';
 
@@ -10,13 +9,9 @@ import { DevicesService } from '../services/devices.service';
   styleUrls: ['./device-detail.component.css']
 })
 export class DeviceDetailComponent implements OnInit {
-  public name: string = "";
-  public password: string = "";
-
   public device: Device;
 
   constructor(
-    private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private dServ: DevicesService) { }
@@ -30,9 +25,17 @@ export class DeviceDetailComponent implements OnInit {
     this.device = await this.dServ.getOne(tag);
   }
 
-  async login() {
-    let res: boolean;
-    res = await this.auth.signIn(this.name, this.password);
-    this.router.navigate(['home']);
+  back() {
+    this.router.navigate(['devices']);
+  }
+
+  async edit() {
+    await this.dServ.put(this.device);
+    this.back();
+  }
+
+  async erase() {
+    await this.dServ.delete(this.device.tag);
+    this.back();
   }
 }

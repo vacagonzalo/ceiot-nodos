@@ -31,9 +31,31 @@ export class DevicesService {
         return device;
       })
       .catch(error => {
-        console.log("error en parseo?")
         console.log(error);
         return <Device>{};
       });
+  }
+
+  put(device: Device): Promise<boolean> {
+    return this.http.put(`${this.url}${device.serial}`, {
+       tag: device.tag,
+       modbus: device.modbus,
+       frec: device.frec,
+       unit: device.unit
+      }, { observe: 'body' }).toPromise()
+      .then(res => {
+        return true;
+      })
+  }
+
+  delete(tag: string): Promise<boolean> {
+    return this.http.delete(`${this.url}${tag}`, {observe: 'response'}).toPromise()
+    .then(res => {
+      return res.status == 202;
+    })
+    .catch(error => {
+      console.log(error);
+      return false;
+    })
   }
 }

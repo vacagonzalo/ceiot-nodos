@@ -72,14 +72,14 @@ router.post('',
         }
     });
 
-router.put('/',
+router.put('/:serial',
     middleware.verifyToken,
     middleware.verifyRankEngineer,
     middleware.logRequest,
     async (req, res) => {
         try {
             const body = req.body;
-            const filter = { serial: body.serial };
+            const filter = { serial: req.params.serial };
             const update = {
                 tag: body.tag,
                 modbus: body.modbus,
@@ -89,9 +89,9 @@ router.put('/',
             let device = await Device.findOne(filter, { _id: 0, __v: 0 });
             if (device) {
                 await Device.findOneAndUpdate(filter, update);
-                res.sendStatus(200);
+                res.send(device);
             } else {
-                res.sendStatus(403);
+                res.send({});
             }
         } catch (error) {
             console.log(error);
@@ -99,14 +99,14 @@ router.put('/',
         }
     });
 
-router.delete('/',
+router.delete('/:tag',
     middleware.verifyToken,
     middleware.verifyRankEngineer,
     middleware.logRequest,
     async (req, res) => {
         try {
             let deleted = await Device.findOneAndDelete(
-                { tag: req.body.tag },
+                { tag: req.params.tag },
                 {});
             if (deleted) {
                 res.sendStatus(202);
