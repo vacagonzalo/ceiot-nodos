@@ -38,24 +38,46 @@ export class DevicesService {
 
   put(device: Device): Promise<boolean> {
     return this.http.put(`${this.url}${device.serial}`, {
-       tag: device.tag,
-       modbus: device.modbus,
-       frec: device.frec,
-       unit: device.unit
-      }, { observe: 'body' }).toPromise()
+      tag: device.tag,
+      modbus: device.modbus,
+      frec: device.frec,
+      unit: device.unit
+    }, { observe: 'body' }).toPromise()
       .then(res => {
         return true;
       })
   }
 
+  post(device: Device): Promise<boolean> {
+    return this.http.post(`${this.url}`, {
+      serial: device.serial,
+      tag: device.tag,
+      modbus: device.modbus,
+      frec: device.frec,
+      unit: device.unit
+    }, { observe: 'body' }).toPromise()
+      .then(res => {
+        let newDevice = <Device>res;
+        if (newDevice) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        return false;
+      })
+  }
+
   delete(tag: string): Promise<boolean> {
-    return this.http.delete(`${this.url}${tag}`, {observe: 'response'}).toPromise()
-    .then(res => {
-      return res.status == 202;
-    })
-    .catch(error => {
-      console.log(error);
-      return false;
-    })
+    return this.http.delete(`${this.url}${tag}`, { observe: 'response' }).toPromise()
+      .then(res => {
+        return res.status == 202;
+      })
+      .catch(error => {
+        console.log(error);
+        return false;
+      })
   }
 }

@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { DeviceDetailComponent } from './device-detail/device-detail.component';
 import { DeviceReadingsComponent } from './device-readings/device-readings.component';
 import { DeviceCalibrationComponent } from './device-calibration/device-calibration.component';
+import { DeviceNewComponent } from './device-new/device-new.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { AuthGuard } from './auth.guard';
 import { DevicesComponent } from './devices/devices.component';
@@ -36,6 +37,11 @@ const routes: Routes = [
   {
     path: 'devices/:tag/calibration',
     component: DeviceCalibrationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'new-device',
+    component: DeviceNewComponent,
     canActivate: [AuthGuard]
   },
   {

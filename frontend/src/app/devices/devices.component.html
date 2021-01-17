@@ -1,4 +1,4 @@
-<button mat-fab color="primary" class="newDevice" *ngIf="auth.loggedIn()">
+<button mat-fab color="primary" class="newDevice" *ngIf="auth.loggedIn()" (click)="add()">
     <mat-icon>add</mat-icon>
 </button>
 

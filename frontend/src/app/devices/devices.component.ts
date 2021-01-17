@@ -32,4 +32,8 @@ export class DevicesComponent implements OnInit {
   calibrate(tag) {
     this.router.navigate(['/devices', tag, 'calibration']);
   }
+
+  add() {
+    this.router.navigate(['/new-device']);
+  }
 }
