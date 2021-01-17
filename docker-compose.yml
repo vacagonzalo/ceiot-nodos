@@ -73,11 +73,11 @@ services:
             - 'mongo'
         networks: 
             - iot
-    db-api:
-        build: ./dbApi
-        image: vaca/db-api
-        container_name: db-api
-        hostname: db-api
+    backend:
+        build: ./backend
+        image: vaca/backend
+        container_name: backend
+        hostname: backend
         expose: 
             - '1883'
             - '6379'
@@ -86,21 +86,6 @@ services:
             - '8080:8080'
         depends_on:
             - 'mosquitto' 
-            - 'mongo'
-            - 'redis'
-        networks: 
-            - iot
-    auth-api:
-        build: ./authApi
-        image: vaca/auth-api
-        container_name: auth-api
-        hostname: auth-api
-        expose: 
-            - '6379'
-            - '27017'
-        ports: 
-            - '8090:8080'
-        depends_on: 
             - 'mongo'
             - 'redis'
         networks: 

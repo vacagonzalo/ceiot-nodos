@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Credentials } from '../models/credentials';
-
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private url: string = "http://localhost:8090/";
+  private url: string = "http://localhost:8080/auth/";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
   signIn(name: string, password: string): Promise<boolean> {
     return this.http.post(
       this.url,
@@ -46,7 +46,20 @@ export class AuthService {
       !!localStorage.getItem('user'));
   }
 
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['login']);
+  }
+
   getToken() {
     return localStorage.getItem('token');
+  }
+
+  getRank() {
+    return localStorage.getItem('rank');
+  }
+
+  getUser() {
+    return localStorage.getItem('user');
   }
 }

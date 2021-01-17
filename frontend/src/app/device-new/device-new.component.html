@@ -1,6 +1,10 @@
 <div class="container">
     <form #deviceForm="ngForm" class="myform">
-        <h1>Serial: {{device.serial}}</h1>
+        <h1>Nuevo Dispositivo</h1>
+        <mat-form-field appearance="fill">
+            <mat-label>Serial</mat-label>
+            <input name="tag" matInput [(ngModel)]="device.serial">
+        </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Tag</mat-label>
             <input name="tag" matInput [(ngModel)]="device.tag">
@@ -19,7 +23,6 @@
         </mat-form-field>
         
         <button mat-raised-button (click)="back()">Volver</button>
-        <button mat-raised-button (click)="edit()" class="erase">Editar</button>
-        <button mat-raised-button color="warn" (click)="erase()" class="erase">Borrar</button>
+        <button mat-raised-button color="warn" (click)="add()" class="erase">Agregar</button>
     </form>
 </div>

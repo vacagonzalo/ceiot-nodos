@@ -9,9 +9,10 @@ import { AuthService } from '../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter<any>();
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(public auth: AuthService, private router: Router) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+  }
   
   toggleSideBar() {
     if (this.auth.loggedIn()){

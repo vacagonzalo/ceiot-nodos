@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CredentialsInterceptorService implements HttpInterceptor{
 
-  constructor() { }
+  constructor(private auth:AuthService) { }
 
   intercept(req, next) {
-    let token = localStorage.getItem('token');
-    let user = localStorage.getItem('user');
     let credentials = req.clone({
       setHeaders: {
-        Autorization: token,
-        'User-Agent': user
+        'Content-Type': "application/json",
+        Authorization: `Bearer ${this.auth.getToken()}`
       }
     });
     return next.handle(credentials);
