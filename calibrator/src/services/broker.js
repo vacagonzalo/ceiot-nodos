@@ -1,5 +1,5 @@
 const mqtt = require('mqtt');
-const MQTT_HOST = process.env.MQTT_HOST || 'mqtt://localhost';
+const MQTT_HOST = process.env.MQTT_HOST || 'mqtt://mosquitto';
 const MQTT_USER = process.env.MQTT_USER || 'frontend';
 const MQTT_PASSWORD = process.env.MQTT_PASSWORD || "human";
 console.log(MQTT_HOST);
