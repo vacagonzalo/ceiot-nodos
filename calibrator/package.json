@@ -1,0 +1,20 @@
+{
+  "name": "calibrator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "eval $(cat ./.env) && nodemon ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^4.2.6",
+    "ws": "^7.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
