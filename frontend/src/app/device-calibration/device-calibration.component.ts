@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
 
 @Component({
@@ -7,15 +8,37 @@ import { WebsocketService } from '../services/websocket.service';
   styleUrls: ['./device-calibration.component.css']
 })
 export class DeviceCalibrationComponent implements OnInit {
-  
-  constructor(private service: WebsocketService) { }
+
+  public liveData$: string[];
+  public lastMeasurement$: string;
+  public tag: string;
+
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private service: WebsocketService) {
+    this.liveData$ = new Array<string>();
+    this.lastMeasurement$ = "";
+    this.tag = "";
+  }
 
   ngOnInit(): void {
+    this.tag = this.route.snapshot.paramMap.get('tag');
     this.service.connect().subscribe(
-      msg => console.log('message received: ' + msg),
+      msg => {
+        let foo = msg.split(',');
+        let device = foo[0];
+        let measurement = foo[1];
+        let now = new Date();
+        this.lastMeasurement$ = `${measurement}@${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+        this.liveData$.push(this.lastMeasurement$);
+      },
       err => console.log(err),
       () => console.log('complete')
     );
+  }
+
+  back() {
+    this.router.navigate(['devices']);
   }
 
 }
