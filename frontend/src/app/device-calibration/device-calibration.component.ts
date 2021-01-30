@@ -28,9 +28,12 @@ export class DeviceCalibrationComponent implements OnInit {
         let foo = msg.split(',');
         let device = foo[0];
         let measurement = foo[1];
-        let now = new Date();
-        this.lastMeasurement$ = `${measurement}@${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-        this.liveData$.push(this.lastMeasurement$);
+        console.log(`${device} - ${this.tag}`);
+        if(device == this.tag) {
+          let now = new Date();
+          this.lastMeasurement$ = `${measurement}@${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+          this.liveData$.push(this.lastMeasurement$);
+        }
       },
       err => console.log(err),
       () => console.log('complete')

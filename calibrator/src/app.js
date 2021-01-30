@@ -22,7 +22,7 @@ wss.on('connection', (ws) => {
 
 mqtt.on('message', (topic, payload) => {
     wss.clients.forEach(client => {
-        let data = `${topic}:${payload}`;
+        let data = `${payload}`;
         client.send(data);
     });
 });
