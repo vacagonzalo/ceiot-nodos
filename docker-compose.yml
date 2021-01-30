@@ -90,6 +90,20 @@ services:
             - 'redis'
         networks: 
             - iot
+    calibrator:
+        build: ./calibrator
+        image: vaca/calibrator
+        container_name: calibrator
+        hostname: calibrator
+        expose: 
+            - '1883'
+            - '9999'
+        ports:
+            - '9999:9999'
+        depends_on: 
+            - 'mosquitto'
+        networks: 
+            - iot
     redis:
         image: redis
         container_name: redis
