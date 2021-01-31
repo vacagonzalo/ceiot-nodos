@@ -1,1 +1,11 @@
-<p>user-detail works!</p>
+<div class="container">
+    <form #deviceForm="ngForm" class="myform">
+        <h1>Nombre: {{user.name}}</h1>
+        <mat-form-field appearance="fill">
+            <mat-label>Permisos</mat-label>
+            <input name="rank" matInput [(ngModel)]="user.rank">
+        </mat-form-field>  
+        <button mat-raised-button (click)="back()">Volver</button>
+        <button mat-raised-button color="warn" (click)="newRank()" class="erase">Actualizar Permisos</button>
+    </form>
+</div>

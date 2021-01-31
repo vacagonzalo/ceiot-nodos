@@ -15,7 +15,7 @@ import { DevicesComponent } from './devices/devices.component';
 
 const routes: Routes = [
   {
-    path: 'users/:name',
+    path: 'users/details/:name',
     component: UserDetailComponent,
     canActivate: [AuthGuard]
   },
