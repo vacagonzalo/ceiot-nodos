@@ -12,8 +12,8 @@ router.get('/all',
     middleware.verifyRankAdministrator,
     async (req, res) => {
         try {
-            let data = await User.find({}, { _id: 0, password: 0, __v: 0 });
-            res.status(200).send(data);
+            let users = await User.find({}, { _id: 0, password: 0, __v: 0 });
+            res.status(200).send({users});
         } catch (error) {
             res.sendStatus(500);
         }
