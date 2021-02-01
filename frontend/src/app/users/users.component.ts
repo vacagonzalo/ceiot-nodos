@@ -9,12 +9,12 @@ import { Router } from '@angular/router';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit{
 
   public list: Users;
 
   constructor(
-    private service: UsersService,
+    private userServ: UsersService,
     public auth: AuthService, 
     private router: Router) { }
 
@@ -23,22 +23,19 @@ export class UsersComponent implements OnInit {
   }
 
   async getUsers() {
-    this.list = await this.service.getAll();
+    this.list = await this.userServ.getAll();
   }
 
   detail(name: string): void {
     this.router.navigate(['/users/details/', name]);
   }
 
-  reset(name: string): void {
-    console.log(name);
-  }
-
-  delete(name: string): void {
-    console.log(name);
+  async reset(name: string) {
+    await this.userServ.resetPassword(name);
   }
 
   newUser(): void {
-    console.log('newUser');
+    console.log('newUser')
+    this.router.navigate(['/users/new']);
   }
 }

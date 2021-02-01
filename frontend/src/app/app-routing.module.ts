@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, CanActivate } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { UsersComponent } from './users/users.component';
@@ -11,12 +11,18 @@ import { DeviceNewComponent } from './device-new/device-new.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { AuthGuard } from './auth.guard';
 import { DevicesComponent } from './devices/devices.component';
+import { NewUserComponent } from './new-user/new-user.component';
 
 
 const routes: Routes = [
   {
     path: 'users/details/:name',
     component: UserDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'users/new',
+    component: NewUserComponent,
     canActivate: [AuthGuard]
   },
   {

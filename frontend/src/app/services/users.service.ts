@@ -44,4 +44,60 @@ export class UsersService {
         return false;
       })
   }
+
+  resetPassword(name: string): Promise<boolean> {
+    let endpoint: string = `${this.url}/reset-password/${name}`;
+    return this.http.put(endpoint, {}).toPromise()
+      .then(res => {
+        return true;
+      })
+      .catch(error => {
+        return false;
+      })
+  }
+
+  changePassword(
+    name: string,
+    oldPassword: string,
+    newPassword): Promise<boolean> {
+    let endpoint: string = `${this.url}/change/password`;
+    return this.http.post(endpoint, {
+      name: name,
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    }, { observe: 'response' }).toPromise()
+      .then(res => {
+        return true;
+      })
+      .catch(error => {
+        return false;
+      })
+  }
+
+  deleteUser(name: string): Promise<boolean> {
+    let endpoint: string = `${this.url}/delete-user/${name}`;
+    return this.http.delete(endpoint, {}).toPromise()
+      .then(res => {
+        return true;
+      })
+      .catch(error => {
+        return false;
+      })
+  }
+
+  createUser(user: User): Promise<boolean> {
+    let endpoint: string = `${this.url}/new`;
+    return this.http.post(endpoint, {
+      name: user.name,
+      email: user.email,
+      password: 'reset',
+      rank: user.rank
+    }).toPromise()
+      .then(res => {
+        return true;
+      })
+      .catch(error => {
+        return false;
+      })
+  }
 }

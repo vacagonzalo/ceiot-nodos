@@ -11,6 +11,7 @@ import { UsersService } from '../services/users.service';
 export class UserDetailComponent implements OnInit {
 
   public user: User;
+  private name: string;
 
   constructor(
     private router: Router,
@@ -22,8 +23,8 @@ export class UserDetailComponent implements OnInit {
   }
 
   async fetchUser() {
-    let name = this.route.snapshot.paramMap.get('name');
-    this.user = await this.userServ.getOne(name);
+    this.name = this.route.snapshot.paramMap.get('name');
+    this.user = await this.userServ.getOne(this.name);
   }
 
   back(): void {
@@ -32,6 +33,11 @@ export class UserDetailComponent implements OnInit {
 
   async newRank() {
     await this.userServ.changeRank(this.user.name,this.user.rank);
+    this.back();
+  }
+
+  async deleteUser() {
+    await this.userServ.deleteUser(this.name);
     this.back();
   }
 
