@@ -24,6 +24,8 @@ import { DeviceNewComponent } from './device-new/device-new.component';
 import { UnitPipe } from './pipes/unit.pipe';
 import { NewUserComponent } from './new-user/new-user.component';
 import { ProfileComponent } from './profile/profile.component';
+import { LogListComponent } from './log-list/log-list.component';
+import { UserPipe } from './pipes/user.pipe';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { ProfileComponent } from './profile/profile.component';
     DeviceNewComponent,
     UnitPipe,
     NewUserComponent,
-    ProfileComponent
+    ProfileComponent,
+    LogListComponent,
+    UserPipe
   ],
   imports: [
     BrowserModule,

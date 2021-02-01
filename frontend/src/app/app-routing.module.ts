@@ -13,6 +13,7 @@ import { AuthGuard } from './auth.guard';
 import { DevicesComponent } from './devices/devices.component';
 import { NewUserComponent } from './new-user/new-user.component';
 import { ProfileComponent } from './profile/profile.component';
+import { LogListComponent } from './log-list/log-list.component';
 
 
 const routes: Routes = [
@@ -59,6 +60,11 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'logs',
+    component: LogListComponent,
     canActivate: [AuthGuard]
   },
   {

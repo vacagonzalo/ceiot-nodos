@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Users } from '../models/users';
 import { User } from '../models/user';
+import { PipeData } from '../models/pipeData';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,22 @@ export class UsersService {
   readonly url: string = "http://localhost:8080/users";
 
   constructor(private http: HttpClient) { }
+
+  getPipeData(): Promise<PipeData> {
+    return this.http.get(
+      `${this.url}/pipe-data`,
+      { observe: 'response' }
+    ).toPromise()
+      .then(res => {
+        console.log('then')
+        let pipeData: PipeData = <PipeData>res.body;
+        return pipeData;
+      })
+      .catch(error => {
+        console.log(error);
+        return <PipeData>{};
+      })
+  }
 
   getAll(): Promise<Users> {
     return this.http.get(`${this.url}/all`, { observe: 'response' }).toPromise()
