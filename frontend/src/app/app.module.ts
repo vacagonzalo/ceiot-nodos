@@ -22,6 +22,8 @@ import { CredentialsInterceptorService } from './services/credentials-intercepto
 import { NavigationComponent } from './navigation/navigation.component';
 import { DeviceNewComponent } from './device-new/device-new.component';
 import { UnitPipe } from './pipes/unit.pipe';
+import { NewUserComponent } from './new-user/new-user.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { UnitPipe } from './pipes/unit.pipe';
     DeviceReadingsComponent,
     NavigationComponent,
     DeviceNewComponent,
-    UnitPipe
+    UnitPipe,
+    NewUserComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

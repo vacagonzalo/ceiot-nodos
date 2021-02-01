@@ -1,1 +1,19 @@
-<p>users works!</p>
+<button mat-fab color="primary" class="newUser" *ngIf="auth.loggedIn()" (click)="newUser()">
+    <mat-icon>add</mat-icon>
+</button>
+
+<mat-card *ngFor="let user of list.users" class="user-card">
+    <mat-card-header>
+        <mat-card-title>
+            {{user.name}}
+        </mat-card-title>
+        <mat-icon *ngIf="user.rank == 3">filter_3</mat-icon>
+        <mat-icon *ngIf="user.rank == 2">filter_2</mat-icon>
+        <mat-icon *ngIf="user.rank == 1">filter_1</mat-icon>
+        <mat-icon *ngIf="user.rank == 0">face_retouching_off</mat-icon>
+    </mat-card-header>
+    <mat-card-content class="container">
+        <button mat-raised-button (click)="detail(user.name)">Detalles</button>
+        <button mat-raised-button (click)="reset(user.name)">Reset</button>
+    </mat-card-content>
+</mat-card>

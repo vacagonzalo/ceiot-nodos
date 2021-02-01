@@ -12,8 +12,23 @@ router.get('/all',
     middleware.verifyRankAdministrator,
     async (req, res) => {
         try {
-            let data = await User.find({}, { _id: 0, password: 0, __v: 0 });
-            res.status(200).send(data);
+            let users = await User.find({}, { _id: 0, password: 0, __v: 0 });
+            res.status(200).send({ users });
+        } catch (error) {
+            res.sendStatus(500);
+        }
+    });
+
+router.get('/one/:name',
+    middleware.verifyToken,
+    middleware.verifyRankAdministrator,
+    async (req, res) => {
+        try {
+            let user = await User.findOne(
+                { name: req.params.name },
+                { _id: 0, password: 0, __v: 0 }
+            );
+            res.status(200).send(user);
         } catch (error) {
             res.sendStatus(500);
         }
