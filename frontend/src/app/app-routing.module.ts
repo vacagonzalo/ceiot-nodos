@@ -12,6 +12,7 @@ import { UserDetailComponent } from './user-detail/user-detail.component';
 import { AuthGuard } from './auth.guard';
 import { DevicesComponent } from './devices/devices.component';
 import { NewUserComponent } from './new-user/new-user.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -53,6 +54,11 @@ const routes: Routes = [
   {
     path: 'devices',
     component: DevicesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
     canActivate: [AuthGuard]
   },
   {
