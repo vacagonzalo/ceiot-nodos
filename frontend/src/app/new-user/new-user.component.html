@@ -1,1 +1,20 @@
-<p>new-user works!</p>
+<div class="container">
+    <form #deviceForm="ngForm" class="myform">
+        <h1>Nuevo Dispositivo</h1>
+        <mat-form-field appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input name="name" matInput [(ngModel)]="user.name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input name="tag" matInput [(ngModel)]="user.email">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Permisos</mat-label>
+            <input name="modbus" matInput [(ngModel)]="user.rank">
+        </mat-form-field>
+        
+        <button mat-raised-button (click)="back()">Volver</button>
+        <button mat-raised-button color="warn" (click)="newUser()" class="erase">Agregar</button>
+    </form>
+</div>
