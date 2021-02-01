@@ -7,6 +7,20 @@ const middleware = require('./middleware/middleware');
 
 const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
 
+router.get('/pipe-data',
+    middleware.verifyToken,
+    middleware.verifyRankAdministrator,
+    async (req, res) => { 
+        try {
+            let pipeData = await User.find({},{
+                email:0, password:0, rank:0, __v:0
+            });
+            res.send({pipeData});
+        } catch (error) {
+            res.sendStatus(500);
+        }
+    });
+
 router.get('/all',
     middleware.verifyToken,
     middleware.verifyRankAdministrator,
