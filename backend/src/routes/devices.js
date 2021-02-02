@@ -33,7 +33,7 @@ router.get('/:tag',
             if (!device) {
                 res.sendStatus(500);
             } else {
-                res.send( device );
+                res.send(device);
             }
         } catch (error) {
             console.log(error);
@@ -68,6 +68,32 @@ router.post('',
             }
         } catch (error) {
             console.log(error);
+            res.sendStatus(500);
+        }
+    });
+
+router.put('/:tag/calibration',
+    middleware.verifyToken,
+    middleware.verifyRankEngineer,
+    middleware.logRequest,
+    async (req, res) => {
+        try {
+            mqtt.publish(`cmnd/${req.params.tag}/mode`, 'cal');
+            res.sendStatus(200);
+        } catch (error) {
+            res.sendStatus(500);
+        }
+    });
+
+router.put('/:tag/default-mode',
+    middleware.verifyToken,
+    middleware.verifyRankEngineer,
+    middleware.logRequest,
+    async (req, res) => {
+        try {
+            mqtt.publish(`cmnd/${req.params.tag}/mode`, 'def');
+            res.sendStatus(200);
+        } catch (error) {
             res.sendStatus(500);
         }
     });

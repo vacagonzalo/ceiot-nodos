@@ -71,12 +71,37 @@ export class DevicesService {
   }
 
   delete(tag: string): Promise<boolean> {
-    return this.http.delete(`${this.url}${tag}`, { observe: 'response' }).toPromise()
+    return this.http.delete(`${this.url}${tag}`, { observe: 'response' })
+      .toPromise()
       .then(res => {
         return res.status == 202;
       })
       .catch(error => {
         console.log(error);
+        return false;
+      })
+  }
+
+  calibrateMode(tag: string): Promise<boolean> {
+    return this.http.put(`${this.url}${tag}/calibration`,
+      { observe: 'response' })
+      .toPromise()
+      .then(res => {
+        return true;
+      })
+      .catch(error => {
+        return false;
+      })
+  }
+
+  defaultMode(tag: string): Promise<boolean> {
+    return this.http.put(`${this.url}${tag}/default-mode`,
+      { observe: 'response' })
+      .toPromise()
+      .then(res => {
+        return true;
+      })
+      .catch(error => {
         return false;
       })
   }
