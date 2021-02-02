@@ -2,7 +2,6 @@ const express = require('express');
 const Device = require('../models/Device');
 const mqtt = require('../connection/broker');
 const router = express.Router();
-
 const middleware = require('./middleware/middleware');
 
 router.get('',

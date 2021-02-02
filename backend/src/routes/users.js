@@ -1,6 +1,5 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const Log = require('../models/Log');
 const User = require('../models/User');
 const router = express.Router();
 const middleware = require('./middleware/middleware');
@@ -35,7 +34,7 @@ router.get('/all',
 
 router.get('/one/:name',
     middleware.verifyToken,
-    middleware.verifyRankAdministrator,
+    middleware.verifyRankAssistant,
     async (req, res) => {
         try {
             let user = await User.findOne(
@@ -51,6 +50,7 @@ router.get('/one/:name',
 router.post('/new',
     middleware.verifyToken,
     middleware.verifyRankAdministrator,
+    middleware.logRequest,
     async (req, res) => {
         try {
             const body = req.body;
@@ -71,14 +71,6 @@ router.post('/new',
                     rank: body.rank
                 });
                 await user.save();
-                let log = new Log({
-                    timestamp: new Date(),
-                    method: 'post',
-                    endpoint: `POST:/users/new`,
-                    user: req.userId,
-                    body: `${body.name},${body.email},${body.rank}`
-                });
-                await log.save();
                 res.sendStatus(201);
             }
         } catch (error) {
@@ -90,6 +82,7 @@ router.post('/new',
 router.put('/change-rank/:name/:rank',
     middleware.verifyToken,
     middleware.verifyRankAdministrator,
+    middleware.logRequest,
     async (req, res) => {
         try {
             let updated = await User.findOneAndUpdate(
@@ -97,14 +90,6 @@ router.put('/change-rank/:name/:rank',
                 { rank: req.params.rank }
             );
             if (updated) {
-                let log = new Log({
-                    timestamp: new Date(),
-                    method: 'put',
-                    endpoint: `PUT:/users/change-rank/:name/:rank`,
-                    user: req.userId,
-                    body: `${req.params.name},${req.params.rank}`
-                });
-                await log.save();
                 res.sendStatus(200);
             } else {
                 res.sendStatus(403);
@@ -117,6 +102,7 @@ router.put('/change-rank/:name/:rank',
 router.put('/reset-password/:name',
     middleware.verifyToken,
     middleware.verifyRankAdministrator,
+    middleware.logRequest,
     async (req, res) => {
         try {
             const SALT = bcrypt.genSaltSync(SALT_ROUNDS);
@@ -126,14 +112,6 @@ router.put('/reset-password/:name',
                 { password: HASH }
             );
             if (updated) {
-                let log = new Log({
-                    timestamp: new Date(),
-                    method: 'put',
-                    endpoint: `PUT:/users/reset-password/:name`,
-                    user: req.userId,
-                    body: `${req.params.name}`
-                });
-                await log.save();
                 res.sendStatus(200);
             } else {
                 res.sendStatus(403);
@@ -145,7 +123,7 @@ router.put('/reset-password/:name',
 
 router.post('/change/password',
     middleware.verifyToken,
-    middleware.verifyRankAdministrator,
+    middleware.verifyRankAssistant,
     async (req, res) => {
         try {
             const body = req.body;
@@ -155,14 +133,6 @@ router.post('/change/password',
                 const HASH = bcrypt.hashSync(body.newPassword, SALT);
                 user.password = HASH;
                 await user.save({ isNew: false });
-                let log = new Log({
-                    timestamp: new Date(),
-                    method: 'post',
-                    endpoint: `POST:/users/change/password`,
-                    user: req.userId,
-                    body: `${body.name}`
-                });
-                await log.save();
                 res.sendStatus(200);
             } else {
                 res.sendStatus(401);
@@ -177,18 +147,11 @@ router.post('/change/password',
 router.delete('/delete-user/:name',
     middleware.verifyToken,
     middleware.verifyRankAdministrator,
+    middleware.logRequest,
     async (req, res) => {
         try {
             let deleted = await User.findOneAndDelete({ name: req.params.name });
             if (deleted) {
-                let log = new Log({
-                    timestamp: new Date(),
-                    method: 'post',
-                    endpoint: `DELETE:/users`,
-                    user: req.userId,
-                    body: `${req.params.name}`
-                });
-                await log.save();
                 res.sendStatus(202);
                 return;
             } else {
