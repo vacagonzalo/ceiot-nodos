@@ -89,6 +89,7 @@ router.put('/:serial',
             let device = await Device.findOne(filter, { _id: 0, __v: 0 });
             if (device) {
                 await Device.findOneAndUpdate(filter, update);
+                mqtt.publish(`cmnd/${device.tag}/frec`, `${body.frec}`);
                 res.send(device);
             } else {
                 res.send({});
