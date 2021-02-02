@@ -84,7 +84,7 @@ export class DevicesService {
 
   calibrateMode(tag: string): Promise<boolean> {
     return this.http.put(`${this.url}${tag}/calibration`,
-      { observe: 'response' })
+      {})
       .toPromise()
       .then(res => {
         return true;
@@ -96,7 +96,7 @@ export class DevicesService {
 
   defaultMode(tag: string): Promise<boolean> {
     return this.http.put(`${this.url}${tag}/default-mode`,
-      { observe: 'response' })
+      {})
       .toPromise()
       .then(res => {
         return true;
