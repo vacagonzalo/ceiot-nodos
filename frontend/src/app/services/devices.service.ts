@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Devices } from '../models/devices';
 import { Device } from '../models/device';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DevicesService {
 
-  public url = "http://localhost:8080/devices/"
+  readonly url = `http://${environment.ipAddr}:8080/devices/`;
 
   constructor(private http: HttpClient) { }
 

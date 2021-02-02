@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Readings } from '../models/readings';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Readings } from '../models/readings';
 })
 export class ReadingsService {
 
-  public url = "http://localhost:8080/readings"
+  readonly url = `http://${environment.ipAddr}:8080/readings`;
 
   constructor(private http: HttpClient) { }
 
