@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
+import { DevicesService } from '../services/devices.service';
 
 @Component({
   selector: 'app-device-calibration',
@@ -15,7 +16,8 @@ export class DeviceCalibrationComponent implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private service: WebsocketService) {
+    private service: WebsocketService,
+    private dServ: DevicesService) {
     this.liveData$ = new Array<string>();
     this.lastMeasurement$ = "";
     this.tag = "";
@@ -41,6 +43,8 @@ export class DeviceCalibrationComponent implements OnInit {
   }
 
   back() {
+    //TODO: order device to normal mode
+    this.dServ.defaultMode(this.tag);
     this.router.navigate(['devices']);
   }
 

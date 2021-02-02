@@ -30,6 +30,7 @@ export class DevicesComponent implements OnInit {
   }
 
   calibrate(tag) {
+    this.dServ.calibrateMode(tag);
     this.router.navigate(['/devices', tag, 'calibration']);
   }
 
