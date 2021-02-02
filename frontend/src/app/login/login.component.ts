@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit {
   public name: string = "";
   public password: string = "";
+  public error: boolean = false;
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void { }
@@ -17,6 +18,11 @@ export class LoginComponent implements OnInit {
   async login() {
     let res:boolean;
     res = await this.auth.signIn(this.name, this.password);
-    this.router.navigate(['home']);
+    if(res) {
+      this.router.navigate(['home']);
+    } else {
+      this.error = true;
+      console.log(`error: ${this.error}`)
+    }
   }
 }
