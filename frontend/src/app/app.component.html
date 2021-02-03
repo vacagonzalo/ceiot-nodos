@@ -1,0 +1,9 @@
+<app-header (toggleSideBarForMe)="sideBarToggler()"></app-header>
+<mat-sidenav-container class="payload">
+    <mat-sidenav mode="cover" [opened]="sideBarOpen">
+        <app-navigation></app-navigation>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,7 @@
+node_modules/
+.npm/
+__pycache__/
+# This is an academic project, the enviroment variables are pushed to the
+# repository.
+# In a normal situation, this should not happend
+#.env 

@@ -1,0 +1,22 @@
+<div class="container">
+    <form #deviceForm="ngForm" class="myform">
+        <h1>Nombre: {{user.name}}</h1>
+        <h2>Email: {{user.email}}</h2>
+        <h2>Permisos: {{user.rank}}</h2>
+        <mat-form-field appearance="fill">
+            <mat-label>Password actual</mat-label>
+            <input type="password" name="old" matInput [(ngModel)]="oldPassword">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Password nuevo</mat-label>
+            <input type="password" name="new" matInput [(ngModel)]="newPassword">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Repetir password nuevo</mat-label>
+            <input type="password" name="new2" matInput [(ngModel)]="newPassword2">
+        </mat-form-field>
+
+        <button mat-raised-button (click)="back()">Volver</button>
+        <button mat-raised-button color="warn" (click)="changePassword()" class="erase">Actualizar</button>
+    </form>
+</div>

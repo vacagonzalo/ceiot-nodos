@@ -1,0 +1,17 @@
+.data {
+    width: 80%;
+    max-width: 1000px;
+    margin: auto;
+}
+
+table {
+    width: 100%;
+}
+
+button {
+    margin-top: 20px;
+}
+
+h1 {
+    margin-top: 20px;
+}

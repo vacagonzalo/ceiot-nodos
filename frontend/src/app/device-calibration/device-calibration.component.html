@@ -1,0 +1,11 @@
+<mat-card class="device-card">
+    <mat-card-header>
+        <mat-card-title>
+            {{tag}}: {{lastMeasurement$}}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="container">
+        <button mat-raised-button (click)="back()" color="primary">Volver</button>
+        <p *ngFor="let m of liveData$">{{m}}</p>
+    </mat-card-content>
+</mat-card>

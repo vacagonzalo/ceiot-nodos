@@ -1,0 +1,25 @@
+<div class="container">
+    <form #deviceForm="ngForm" class="myform">
+        <h1>Serial: {{device.serial}}</h1>
+        <mat-form-field appearance="fill">
+            <mat-label>Tag</mat-label>
+            <input name="tag" matInput [(ngModel)]="device.tag">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Modbus addr</mat-label>
+            <input name="modbus" matInput [(ngModel)]="device.modbus">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Frecuencia</mat-label>
+            <input name="frec" matInput [(ngModel)]="device.frec">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Unidad</mat-label>
+            <input name="unit" matInput [(ngModel)]="device.unit">
+        </mat-form-field>
+        
+        <button mat-raised-button (click)="back()">Volver</button>
+        <button mat-raised-button (click)="edit()" class="erase">Editar</button>
+        <button mat-raised-button color="warn" (click)="erase()" class="erase">Borrar</button>
+    </form>
+</div>

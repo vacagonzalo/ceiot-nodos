@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+        <button mat-icon-button *ngIf="auth.loggedIn()" (click)="toggleSideBar()">
+            <mat-icon>menu</mat-icon>
+        </button>
+
+        <span> Gador </span>
+
+        <span class="spacer"></span>
+
+        <button *ngIf="auth.loggedIn()" (click)="auth.logout()" mat-icon-button>
+            <mat-icon>login</mat-icon>
+        </button>
+</mat-toolbar>

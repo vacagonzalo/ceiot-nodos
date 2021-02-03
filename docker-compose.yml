@@ -1,0 +1,114 @@
+version: '3'
+
+networks: 
+    iot:
+        driver: bridge
+
+services: 
+    modbus-server:
+        image: oitc/modbus-server
+        container_name: modbus-server
+        hostname: modbus-server
+        restart: always
+        ports:
+            - '5020:5020'
+        expose: 
+            - '5020'
+        networks: 
+            - iot
+    mosquitto:
+        image: eclipse-mosquitto
+        container_name: mosquitto
+        hostname: mosquitto
+        restart: always
+        volumes: 
+            - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+            - ./mosquitto/users.txt:/mosquitto/config/users.txt
+            - ./mosquitto/acl.txt:/mosquitto/config/acl.txt
+        expose: 
+            - '1883'
+            - '9001'
+        ports: 
+            - '1883:1883'
+            - '9001:9001'
+        networks: 
+            - iot
+    hrv:
+        build: ./holdingRegistersValidator/
+        image: vaca/hrv
+        container_name: hrv
+        hostname: hrv
+        restart: always
+        expose: 
+            - '1883'
+            - '5020'
+        depends_on: 
+            - 'mosquitto'
+            - 'mongo'
+            - 'modbus-server'
+        networks: 
+            - iot
+    mongo:
+        image: mongo
+        container_name: mongo
+        hostname: mongo
+        command: mongod --bind_ip_all --port 27017
+        expose: 
+            - '27017'
+        volumes: 
+            - ./mongodb/scripts:/scripts
+        networks:
+            - iot
+    pv:
+        build: ./persistenceValidator
+        image: vaca/pv
+        container_name: pv
+        hostname: pv
+        restart: always
+        expose: 
+            - '1883'
+            - '27017'
+        depends_on: 
+            - 'mosquitto'
+            - 'mongo'
+        networks: 
+            - iot
+    backend:
+        build: ./backend
+        image: vaca/backend
+        container_name: backend
+        hostname: backend
+        expose: 
+            - '1883'
+            - '6379'
+            - '27017'
+        ports: 
+            - '8080:8080'
+        depends_on:
+            - 'mosquitto' 
+            - 'mongo'
+            - 'redis'
+        networks: 
+            - iot
+    calibrator:
+        build: ./calibrator
+        image: vaca/calibrator
+        container_name: calibrator
+        hostname: calibrator
+        expose: 
+            - '1883'
+            - '9999'
+        ports:
+            - '9999:9999'
+        depends_on: 
+            - 'mosquitto'
+        networks: 
+            - iot
+    redis:
+        image: redis
+        container_name: redis
+        hostname: redis
+        expose:
+            - '6379'
+        networks: 
+            - iot

@@ -1,0 +1,14 @@
+[
+    {
+        "id":"esp32",
+        "addr":0
+    },
+    {
+        "id":"raspberry",
+        "addr":1
+    },
+    {
+        "id":"edu-ciaa",
+        "addr":2
+    }
+]
