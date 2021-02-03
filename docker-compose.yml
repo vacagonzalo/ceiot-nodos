@@ -112,3 +112,11 @@ services:
             - '6379'
         networks: 
             - iot
+    frontend:
+        build: ./frontend/
+        image: vaca/frontend
+        container_name: frontend
+        hostname: frontend
+        restart: always
+        ports: 
+        - '8181:80'
