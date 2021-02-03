@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-export const WS_ENDPOINT = "ws://127.0.0.1:9999";
+import { environment } from '../../environments/environment';
+export const WS_ENDPOINT = `ws://${environment.ipAddr}:9999`;
 
 @Injectable({
   providedIn: 'root'

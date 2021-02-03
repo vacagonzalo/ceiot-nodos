@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Logs } from '../models/logs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogsService {
 
-  readonly url: string = "http://localhost:8080/logs/";
+  readonly url: string = `http://${environment.ipAddr}:8080/logs/`;
+
   constructor(private http: HttpClient) { }
 
   getAll(): Promise<Logs> {

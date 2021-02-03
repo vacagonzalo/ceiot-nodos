@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Users } from '../models/users';
 import { User } from '../models/user';
 import { PipeData } from '../models/pipeData';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
 
-  readonly url: string = "http://localhost:8080/users";
+  readonly url: string = `http://${environment.ipAddr}:8080/users`;
 
   constructor(private http: HttpClient) { }
 

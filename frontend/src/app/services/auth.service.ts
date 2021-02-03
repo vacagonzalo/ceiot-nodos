@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Credentials } from '../models/credentials';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private url: string = "http://localhost:8080/auth/";
+  readonly url: string = `http://${environment.ipAddr}:8080/auth/`;
 
   constructor(private http: HttpClient, private router: Router) { }
   signIn(name: string, password: string): Promise<boolean> {
