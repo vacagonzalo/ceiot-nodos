@@ -12,11 +12,14 @@ export class UserDetailComponent implements OnInit {
 
   public user: User;
   private name: string;
+  public rankError: boolean;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private userServ: UsersService) { }
+    private userServ: UsersService) {
+      this.rankError = false;
+     }
 
   ngOnInit(): void {
     this.fetchUser();
@@ -32,8 +35,11 @@ export class UserDetailComponent implements OnInit {
   }
 
   async newRank() {
+    this.rankError = !(this.user.rank <= 3 && this.user.rank >= 0);
+    if(!this.rankError) {
     await this.userServ.changeRank(this.user.name,this.user.rank);
     this.back();
+    }
   }
 
   async deleteUser() {
