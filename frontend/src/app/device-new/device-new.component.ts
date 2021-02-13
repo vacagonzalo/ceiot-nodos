@@ -9,11 +9,17 @@ import { DevicesService } from '../services/devices.service';
 })
 export class DeviceNewComponent implements OnInit {
   public device: Device;
+  public modbusError: boolean;
+  public unitError: boolean;
+  readonly regular = /^([h/t])/;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private dServ: DevicesService) { 
       this.device = <Device>{};
+      this.modbusError = false;
+      this.unitError = false;
     }
 
   ngOnInit(): void {
@@ -24,8 +30,12 @@ export class DeviceNewComponent implements OnInit {
   }
 
   async add() {
-    await this.dServ.post(this.device);
-    this.back();
+    this.unitError = !this.regular.test(this.device.unit);
+    this.modbusError = this.device.modbus < 0;
+    if(!(this.unitError || this.modbusError)) {
+      await this.dServ.post(this.device);
+      this.back();
+    }
   }
 
 }
