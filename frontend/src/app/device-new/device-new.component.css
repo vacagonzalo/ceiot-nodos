@@ -10,3 +10,9 @@
 .erase {
     margin-top: 20px;
 }
+
+.error {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}

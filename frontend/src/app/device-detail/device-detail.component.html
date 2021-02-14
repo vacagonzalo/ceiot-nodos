@@ -21,5 +21,7 @@
         <button mat-raised-button (click)="back()">Volver</button>
         <button mat-raised-button (click)="edit()" class="erase">Editar</button>
         <button mat-raised-button color="warn" (click)="erase()" class="erase">Borrar</button>
+        <div *ngIf="modbusError" class="error">Dirección modbus inválida</div>
+        <div *ngIf="unitError" class="error">Unidad inválida</div>
     </form>
 </div>

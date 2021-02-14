@@ -10,11 +10,16 @@ import { DevicesService } from '../services/devices.service';
 })
 export class DeviceDetailComponent implements OnInit {
   public device: Device;
+  public modbusError: boolean;
+  public unitError: boolean;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dServ: DevicesService) { }
+    private dServ: DevicesService) { 
+      this.modbusError = false;
+      this.unitError = false;
+    }
 
   ngOnInit(): void {
     this.fetchDevice();
@@ -30,8 +35,12 @@ export class DeviceDetailComponent implements OnInit {
   }
 
   async edit() {
+    this.unitError = !(this.device.unit == 't' || this.device.unit == 'h');
+    this.modbusError = !(this.device.modbus >= 0);
+    if(!(this.unitError) || (this.modbusError)) {
     await this.dServ.put(this.device);
     this.back();
+    }
   }
 
   async erase() {
