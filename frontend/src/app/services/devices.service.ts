@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Devices } from '../models/devices';
 import { Device } from '../models/device';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class DevicesService {
 
   readonly url = `http://${environment.ipAddr}:8080/devices/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   getAll(): Promise<Devices> {
     return this.http.get(this.url, { observe: 'response' }).toPromise()
@@ -20,7 +21,7 @@ export class DevicesService {
         return devices;
       })
       .catch(error => {
-        console.log(error);
+        this.auth.logout();
         return <Devices>{};
       });
   }
@@ -32,7 +33,7 @@ export class DevicesService {
         return device;
       })
       .catch(error => {
-        console.log(error);
+        this.auth.logout();
         return <Device>{};
       });
   }
@@ -46,6 +47,9 @@ export class DevicesService {
     }, { observe: 'body' }).toPromise()
       .then(res => {
         return true;
+      })
+      .catch(err => {
+        return false;
       })
   }
 
@@ -66,7 +70,6 @@ export class DevicesService {
         }
       })
       .catch(error => {
-        console.log(error);
         return false;
       })
   }
@@ -78,7 +81,6 @@ export class DevicesService {
         return res.status == 202;
       })
       .catch(error => {
-        console.log(error);
         return false;
       })
   }

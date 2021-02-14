@@ -4,6 +4,7 @@ import { Users } from '../models/users';
 import { User } from '../models/user';
 import { PipeData } from '../models/pipeData';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class UsersService {
 
   readonly url: string = `http://${environment.ipAddr}:8080/users`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   getPipeData(): Promise<PipeData> {
     return this.http.get(
@@ -25,7 +26,7 @@ export class UsersService {
         return pipeData;
       })
       .catch(error => {
-        console.log(error);
+        this.auth.logout();
         return <PipeData>{};
       })
   }
@@ -37,6 +38,7 @@ export class UsersService {
         return users;
       })
       .catch(error => {
+        this.auth.logout();
         return <Users>{};
       })
   }
@@ -48,6 +50,7 @@ export class UsersService {
         return user;
       })
       .catch(error => {
+        this.auth.logout();
         return <User>{};
       })
   }
